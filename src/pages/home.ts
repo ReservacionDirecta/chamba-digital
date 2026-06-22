@@ -20,6 +20,7 @@ export function renderHome(container: HTMLDivElement) {
         playsinline
         preload="auto"
         loop
+        webkit-playsinline
       ></video>
       <div class="hero-overlay"></div>
 
