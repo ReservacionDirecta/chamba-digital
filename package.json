@@ -1,0 +1,20 @@
+{
+  "name": "polar-booking-sites",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.1",
+    "tailwindcss": "^4.3.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16"
+  },
+  "dependencies": {
+    "nodemailer": "^9.0.1"
+  }
+}
