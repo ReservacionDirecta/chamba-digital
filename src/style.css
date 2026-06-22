@@ -68,12 +68,13 @@ a { text-decoration: none; color: inherit; }
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  width: 100%;
   z-index: 200;
   background: transparent;
   padding: 14px 0;
   transition: all 0.3s ease;
   border-bottom: 1px solid transparent;
+  box-sizing: border-box;
 }
 
 .navbar.scrolled {
@@ -86,9 +87,11 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1240px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -540,6 +543,16 @@ a { text-decoration: none; color: inherit; }
 
 /* ═══ BUSINESS TYPES ═══ */
 .business-types { padding: 120px 0; }
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
 
 /* ═══ PRICING ═══ */
 .pricing {
@@ -1057,16 +1070,18 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 768px) {
   .container { padding: 0 20px; }
   .navbar { padding: 12px 0; }
-  .nav-links { gap: 16px; }
+  .nav-inner { padding: 0 16px; }
+  .nav-links { gap: 12px; }
   .nav-links a:not(.btn) { display: none; }
-  .nav-links .btn { padding: 8px 18px; font-size: 13px; }
+  .nav-links .btn { padding: 8px 16px; font-size: 13px; }
   .features-grid { grid-template-columns: 1fr; }
+  .business-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 16px; }
   .how-steps { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
   .pricing-grid, .sub-plans { grid-template-columns: 1fr; max-width: 420px; }
   .datetime-grid { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
-  .hero-content { padding: 80px 20px 40px; }
-  .hero-content h1 { font-size: 34px; margin-bottom: 14px; letter-spacing: -0.02em; }
+  .hero-content { padding: 80px 16px 40px; }
+  .hero-content h1 { font-size: 32px; margin-bottom: 14px; letter-spacing: -0.02em; }
   .hero-content .hero-sub { font-size: 14px; margin-bottom: 24px; padding: 0; }
   .hero-content .hero-actions { max-width: 280px; }
   .hero-content .hero-actions .btn { padding: 14px 20px; font-size: 14px; }
@@ -1077,6 +1092,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 480px) {
+  .business-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .time-slots { grid-template-columns: repeat(2, 1fr); }
   .hero-actions { flex-direction: column; align-items: center; }
   .success-actions, .pending-actions { flex-direction: column; }

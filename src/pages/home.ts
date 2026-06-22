@@ -93,7 +93,7 @@ export function renderHome(container: HTMLDivElement) {
       <div class="container">
         <h2 class="section-title" data-reveal="fade-up">Sirve para cualquier negocio de servicios</h2>
         <p class="section-sub" data-reveal="fade-up" data-reveal-delay="100">Si tu negocio agenda citas, nuestro motor de reservas es para ti</p>
-        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 1100px; margin: 0 auto;">
+        <div class="business-grid">
           ${[
             ['/icons/peluqueria.svg', 'Peluquerías'],
             ['/icons/consultorio.svg', 'Consultorios'],
