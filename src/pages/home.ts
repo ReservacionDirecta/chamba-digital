@@ -21,39 +21,7 @@ export function renderHome(container: HTMLDivElement) {
           <a href="#/reservar" class="btn btn-outline btn-lg" data-ripple>Ver demo</a>
         </div>
         <div class="hero-preview">
-          <div class="browser-mock" data-tilt="4">
-            <div class="browser-bar">
-              <span class="dot red"></span>
-              <span class="dot yellow"></span>
-              <span class="dot green"></span>
-              <span class="browser-url">tunegocio.com/reservar</span>
-            </div>
-            <div class="browser-content">
-              <div class="preview-card">
-                <div class="preview-calendar">
-                  <div class="cal-header">Junio 2026</div>
-                  <div class="cal-grid">
-                    ${['Lu','Ma','Mi','Ju','Vi','Sa','Do'].map(d => `<div class="cal-day">${d}</div>`).join('')}
-                    ${Array.from({ length: 35 }, (_, i) => {
-                      const day = i
-                      const valid = day >= 1 && day <= 30
-                      return valid
-                        ? `<div class="cal-day${day === 15 ? ' selected' : ''}">${day}</div>`
-                        : `<div class="cal-day" style="opacity:0"></div>`
-                    }).join('')}
-                  </div>
-                </div>
-                <div class="preview-slots">
-                  <div class="slot taken">09:00</div>
-                  <div class="slot">10:00</div>
-                  <div class="slot taken">11:00</div>
-                  <div class="slot selected">14:00</div>
-                  <div class="slot">15:00</div>
-                  <div class="slot">16:00</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <img src="/images/hero-booking.svg" alt="Motor de reservas — calendario con horarios disponibles y confirmación de cita" class="hero-image" width="720" height="450" loading="eager" />
         </div>
       </div>
     </section>
@@ -97,22 +65,23 @@ export function renderHome(container: HTMLDivElement) {
       </div>
     </section>
 
-    <section class="how-it-works" style="padding: 140px 0; background: var(--color-surface-0);">
+    <section class="how-it-works">
       <div class="container">
         <h2 class="section-title" data-reveal="fade-up">¿Cómo funciona?</h2>
         <p class="section-sub" data-reveal="fade-up" data-reveal-delay="100">Tres pasos simples para tener tu web funcionando</p>
+        <img src="/images/confirmation-flow.svg" alt="Flujo de confirmación — email, pago y WhatsApp conectados" class="section-image" data-reveal="scale-in" width="600" height="400" loading="lazy" />
         <div class="features-grid" style="max-width: 900px; margin: 0 auto; grid-template-columns: repeat(3, 1fr);">
-          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="150" data-tilt="3">
+          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="150">
             <div style="font-size: 48px; font-weight: 800; color: var(--color-accent); margin-bottom: 16px;">1</div>
             <h3>Eliges tu plan</h3>
-            <p>El plan base por $30/mes o el plan dedicado por $99/mes con nuestro 6% alineado y todas las integraciones.</p>
+            <p>El plan base por $30/mes o el plan dedicado por $99/mes con nuestro 6% alineado.</p>
           </div>
-          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="250" data-tilt="3">
+          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="250">
             <div style="font-size: 48px; font-weight: 800; color: var(--color-accent); margin-bottom: 16px;">2</div>
             <h3>Nosotros construimos</h3>
             <p>Tu web, motor de reservas, WhatsApp y pagos configurados en 48-72 horas.</p>
           </div>
-          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="350" data-tilt="3">
+          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="350">
             <div style="font-size: 48px; font-weight: 800; color: var(--color-accent); margin-bottom: 16px;">3</div>
             <h3>Tú pones la gasolina</h3>
             <p>Atiende bien el WhatsApp, lleva tráfico a la web. Nosotros optimizamos el embudo mes a mes.</p>
@@ -121,7 +90,7 @@ export function renderHome(container: HTMLDivElement) {
       </div>
     </section>
 
-    <section class="business-types" style="padding: 140px 0; background: var(--color-bg);">
+    <section class="business-types">
       <div class="container">
         <h2 class="section-title" data-reveal="fade-up">Sirve para cualquier negocio de servicios</h2>
         <p class="section-sub" data-reveal="fade-up" data-reveal-delay="100">Si tu negocio agenda citas, nuestro motor de reservas es para ti</p>
@@ -156,7 +125,7 @@ export function renderHome(container: HTMLDivElement) {
             <div class="price-header">
               <h3>Plan Base</h3>
               <div class="price">
-                <span class="amount" data-count="30" data-count-prefix="$" data-count-suffix="">$30</span>
+                <span class="amount">$30</span>
                 <span class="period">USD/mes</span>
               </div>
             </div>
@@ -176,7 +145,7 @@ export function renderHome(container: HTMLDivElement) {
             <div class="price-header">
               <h3>Plan Dedicado</h3>
               <div class="price">
-                <span class="amount" data-count="99" data-count-prefix="$" data-count-suffix="">$99</span>
+                <span class="amount">$99</span>
                 <span class="period">USD/mes + 6% ventas</span>
               </div>
             </div>
