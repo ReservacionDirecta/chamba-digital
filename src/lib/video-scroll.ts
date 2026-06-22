@@ -4,6 +4,9 @@ export function initVideoScroll() {
   const mobileVideo = document.querySelector<HTMLVideoElement>('#hero-video-mobile')
   const overlay = document.getElementById('hero-overlay')
   const navbar = document.querySelector<HTMLElement>('.navbar')
+  const audioBtn = document.getElementById('audio-toggle')
+  const audioOnIcon = document.getElementById('audio-on')
+  const audioOffIcon = document.getElementById('audio-off')
   if (!heroScroll) return
 
   let duration = 0
@@ -11,6 +14,7 @@ export function initVideoScroll() {
   let currentSmoothTime = 0
   let animating = false
   let videoReady = false
+  let isMuted = true
 
   const SMOOTH_FACTOR = 0.12
   const SEEK_THRESHOLD = 0.03
@@ -20,12 +24,8 @@ export function initVideoScroll() {
     return desktopVideo
   }
 
-  function getOtherVideo(): HTMLVideoElement | null {
-    if (window.innerWidth <= 768 && desktopVideo) return desktopVideo
-    return mobileVideo
-  }
-
   async function preloadVideo(video: HTMLVideoElement) {
+    video.muted = true
     try {
       const response = await fetch(video.src)
       const blob = await response.blob()
@@ -42,14 +42,16 @@ export function initVideoScroll() {
     if (active) {
       duration = active.duration
       active.currentTime = 0
-      active.pause()
     }
   }
 
   function onCanPlayThrough() {
     videoReady = true
     const active = getActiveVideo()
-    if (active) active.pause()
+    if (active) {
+      active.muted = true
+      active.play().catch(() => {})
+    }
     startAnimation()
   }
 
@@ -107,6 +109,21 @@ export function initVideoScroll() {
     }
   }
 
+  function toggleAudio() {
+    isMuted = !isMuted
+    const active = getActiveVideo()
+    if (active) active.muted = isMuted
+
+    if (audioOnIcon && audioOffIcon) {
+      audioOnIcon.style.display = isMuted ? 'none' : 'block'
+      audioOffIcon.style.display = isMuted ? 'block' : 'none'
+    }
+  }
+
+  if (audioBtn) {
+    audioBtn.addEventListener('click', toggleAudio)
+  }
+
   if (desktopVideo) {
     desktopVideo.addEventListener('loadedmetadata', onLoadedMetadata)
     desktopVideo.addEventListener('canplaythrough', onCanPlayThrough)
@@ -123,6 +140,7 @@ export function initVideoScroll() {
 
   return () => {
     animating = false
+    if (audioBtn) audioBtn.removeEventListener('click', toggleAudio)
     if (desktopVideo) {
       desktopVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
       desktopVideo.removeEventListener('canplaythrough', onCanPlayThrough)

@@ -602,6 +602,32 @@ a { text-decoration: none; color: inherit; }
 .whatsapp-float a::before { content: ''; position: absolute; width: 56px; height: 56px; border-radius: 50%; background: rgba(37, 211, 102, 0.2); animation: wa-ring 2s ease-out infinite; }
 @keyframes wa-ring { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.6); opacity: 0; } }
 
+/* ═══ AUDIO TOGGLE ═══ */
+.audio-btn {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.audio-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
 .loader { text-align: center; padding: 72px; color: var(--color-ink-muted); font-size: 15px; }
 
 /* ═══ RESPONSIVE ═══ */
