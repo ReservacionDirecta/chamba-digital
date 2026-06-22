@@ -92,22 +92,22 @@ export function renderHome(container: HTMLDivElement) {
       <div class="container">
         <h2 class="section-title" data-reveal="fade-up">¿Cómo funciona?</h2>
         <p class="section-sub" data-reveal="fade-up" data-reveal-delay="100">Tres pasos simples para tener tu web funcionando</p>
-        <img src="/images/confirmation-flow.svg" alt="Flujo de confirmación — email, pago y WhatsApp conectados" class="section-image" data-reveal="scale-in" width="600" height="400" loading="lazy" />
-        <div class="features-grid" style="max-width: 900px; margin: 0 auto; grid-template-columns: repeat(3, 1fr);">
-          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="150">
-            <div style="font-size: 48px; font-weight: 800; color: var(--color-accent); margin-bottom: 16px;">1</div>
+        <img src="/images/confirmation-flow.svg" alt="Flujo de confirmación — email, pago y WhatsApp conectados" class="section-image" data-reveal="scale-in" width="520" height="350" loading="lazy" />
+        <div class="how-steps">
+          <div class="how-step" data-reveal="fade-up" data-reveal-delay="150">
+            <div class="how-step-num">1</div>
             <h3>Eliges tu plan</h3>
-            <p>El plan base por $30/mes o el plan dedicado por $99/mes con nuestro 6% alineado.</p>
+            <p>El plan base por $30/mes o el plan dedicado por $99/mes con nuestro 6% alineado y todas las integraciones.</p>
           </div>
-          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="250">
-            <div style="font-size: 48px; font-weight: 800; color: var(--color-accent); margin-bottom: 16px;">2</div>
+          <div class="how-step" data-reveal="fade-up" data-reveal-delay="250">
+            <div class="how-step-num">2</div>
             <h3>Nosotros construimos</h3>
-            <p>Tu web, motor de reservas, WhatsApp y pagos configurados en 48-72 horas.</p>
+            <p>Tu web, motor de reservas, WhatsApp y pagos configurados en 48-72 horas. Listo para recibir clientes.</p>
           </div>
-          <div class="feature-card" style="text-align: center;" data-reveal="fade-up" data-reveal-delay="350">
-            <div style="font-size: 48px; font-weight: 800; color: var(--color-accent); margin-bottom: 16px;">3</div>
+          <div class="how-step" data-reveal="fade-up" data-reveal-delay="350">
+            <div class="how-step-num">3</div>
             <h3>Tú pones la gasolina</h3>
-            <p>Atiende bien el WhatsApp, lleva tráfico a la web. Nosotros optimizamos el embudo mes a mes.</p>
+            <p>Atiende bien el WhatsApp, lleva tráfico a la web. Nosotros optimizamos el embudo de conversión mes a mes.</p>
           </div>
         </div>
       </div>
