@@ -96,19 +96,19 @@ export function renderHome(container: HTMLDivElement) {
         <p class="section-sub" data-reveal="fade-up" data-reveal-delay="100">Si tu negocio agenda citas, nuestro motor de reservas es para ti</p>
         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 1100px; margin: 0 auto;">
           ${[
-            ['✂️', 'Peluquerías'],
-            ['🏥', 'Consultorios'],
-            ['💆', 'Spas & Estética'],
-            ['🏋️', 'Gimnasios'],
-            ['🏠', 'Inmobiliarias & Realtors'],
-            ['🔧', 'Talleres mecánicos'],
-            ['🎓', 'Clases particulares'],
-            ['📸', 'Estudios fotográficos'],
-            ['🐾', 'Veterinarias'],
-            ['🏗️', 'Arquitectos & Diseñadores'],
+            ['/icons/peluqueria.svg', 'Peluquerías'],
+            ['/icons/consultorio.svg', 'Consultorios'],
+            ['/icons/spa.svg', 'Spas & Estética'],
+            ['/icons/gimnasio.svg', 'Gimnasios'],
+            ['/icons/inmobiliaria.svg', 'Inmobiliarias & Realtors'],
+            ['/icons/taller.svg', 'Talleres mecánicos'],
+            ['/icons/clases.svg', 'Clases particulares'],
+            ['/icons/fotografia.svg', 'Estudios fotográficos'],
+            ['/icons/veterinaria.svg', 'Veterinarias'],
+            ['/icons/arquitectos.svg', 'Arquitectos & Diseñadores'],
           ].map(([icon, name], i) => `
             <div class="feature-card" style="text-align: center; padding: 28px 16px;" data-reveal="scale-in" data-reveal-delay="${100 + i * 60}">
-              <div style="font-size: 32px; margin-bottom: 10px;">${icon}</div>
+              <img src="${icon}" alt="${name}" width="48" height="48" style="margin: 0 auto 12px; display: block;" loading="lazy" />
               <h3 style="font-size: 14px; font-weight: 600;">${name}</h3>
             </div>
           `).join('')}
