@@ -12,28 +12,6 @@ export function renderHome(container: HTMLDivElement) {
     </nav>
 
     <section class="hero-video-section">
-      <video
-        id="hero-video"
-        class="hero-video hero-video-desktop"
-        src="/hero.mp4"
-        muted
-        playsinline
-        preload="auto"
-        loop
-        webkit-playsinline
-      ></video>
-      <video
-        id="hero-video-mobile"
-        class="hero-video hero-video-mobile"
-        src="/hero-vertical.mp4"
-        muted
-        playsinline
-        preload="auto"
-        loop
-        webkit-playsinline
-      ></video>
-      <div class="hero-overlay"></div>
-
       <div class="hero-content">
         <div class="hero-badge"><img src="/icons/rocket.svg" alt="" width="18" height="18" /> Web + Motor de Reservas + WhatsApp</div>
         <h1>Tu negocio,<br/><span class="gradient">reservas automáticas</span></h1>

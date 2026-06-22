@@ -45,6 +45,8 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -80,7 +82,14 @@ a { text-decoration: none; color: inherit; }
   border-bottom-color: var(--color-border);
 }
 
-.nav-inner { display: flex; align-items: center; justify-content: space-between; }
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
 
 .logo {
   font-size: 20px;
@@ -207,14 +216,14 @@ a { text-decoration: none; color: inherit; }
   position: relative;
   height: 100vh;
   min-height: 600px;
-  overflow: hidden;
+  z-index: 2;
 }
 
 .hero-video {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   object-fit: cover;
   object-position: center center;
@@ -226,7 +235,7 @@ a { text-decoration: none; color: inherit; }
   display: none;
   object-fit: cover;
   object-position: center center;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   min-height: 100dvh;
 }
@@ -235,7 +244,7 @@ a { text-decoration: none; color: inherit; }
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   background: linear-gradient(
     180deg,
