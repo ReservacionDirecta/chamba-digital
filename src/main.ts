@@ -9,13 +9,20 @@ import { renderSubscriptionSuccess } from './pages/subscription-success.js'
 import { initScrollReveal } from './lib/animations.js'
 import { initAllInteractions } from './lib/interactions.js'
 import { updateSEO } from './lib/seo.js'
+import { initVideoScroll } from './lib/video-scroll.js'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
+let cleanupVideo: (() => void) | undefined
 
 function router() {
   const hash = window.location.hash || '#/'
   const [path, query] = hash.slice(1).split('?')
   const params = new URLSearchParams(query)
+
+  if (cleanupVideo) {
+    cleanupVideo()
+    cleanupVideo = undefined
+  }
 
   window.scrollTo({ top: 0, behavior: 'instant' })
 
@@ -47,6 +54,9 @@ function router() {
   requestAnimationFrame(() => {
     initScrollReveal()
     initAllInteractions()
+    if (path === '/' || path === '') {
+      cleanupVideo = initVideoScroll() || undefined
+    }
   })
 }
 
