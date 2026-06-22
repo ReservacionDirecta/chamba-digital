@@ -21,7 +21,30 @@ export function renderHome(container: HTMLDivElement) {
           <a href="#/reservar" class="btn btn-outline btn-lg" data-ripple>Ver demo</a>
         </div>
         <div class="hero-preview">
-          <img src="/images/hero-booking.svg" alt="Motor de reservas — calendario con horarios disponibles y confirmación de cita" class="hero-image" width="720" height="450" loading="eager" />
+          <div class="demo-widget" id="demo-booking">
+            <div class="demo-header">
+              <div class="demo-dots">
+                <span class="demo-dot r"></span>
+                <span class="demo-dot y"></span>
+                <span class="demo-dot g"></span>
+              </div>
+              <span class="demo-url">tunegocio.com/reservar</span>
+            </div>
+            <div class="demo-body">
+              <div class="demo-left">
+                <div class="demo-cal-header" id="demo-month"></div>
+                <div class="demo-cal-grid" id="demo-calendar"></div>
+              </div>
+              <div class="demo-right">
+                <div class="demo-slots-label" id="demo-slots-label">Selecciona un día</div>
+                <div class="demo-slots" id="demo-slots"></div>
+                <div class="demo-badge" id="demo-badge" style="display:none;">
+                  <img src="/icons/check.svg" alt="" width="18" height="18" />
+                  <span>Reservado</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -192,5 +215,81 @@ export function renderHome(container: HTMLDivElement) {
         </div>
       </div>
     </footer>
-  `
+  `;
+
+  initDemoWidget()
+}
+
+function initDemoWidget() {
+  const cal = document.querySelector('#demo-calendar') as HTMLElement
+  const monthEl = document.querySelector('#demo-month') as HTMLElement
+  const slotsLabel = document.querySelector('#demo-slots-label') as HTMLElement
+  const slotsEl = document.querySelector('#demo-slots') as HTMLElement
+  const badge = document.querySelector('#demo-badge') as HTMLElement
+  if (!cal || !monthEl || !slotsEl || !slotsLabel || !badge) return
+
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth()
+  const today = now.getDate()
+
+  const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+  monthEl.textContent = `${monthNames[month]} ${year}`
+
+  const days = ['Lu','Ma','Mi','Ju','Vi','Sa','Do']
+  const firstDay = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const startDay = firstDay === 0 ? 6 : firstDay - 1
+
+  cal.innerHTML = days.map(d => `<div class="demo-cal-day header">${d}</div>`).join('')
+
+  for (let i = 0; i < startDay; i++) {
+    cal.innerHTML += `<div class="demo-cal-day empty"></div>`
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isPast = d < today
+    const isToday = d === today
+    const cls = isPast ? 'past' : isToday ? 'today' : ''
+    cal.innerHTML += `<div class="demo-cal-day ${cls}" data-day="${d}">${d}</div>`
+  }
+
+  const SLOTS = ['09:00','10:00','11:00','14:00','15:00','16:00']
+  const TAKEN = new Set<number>()
+
+  function renderSlots(day: number) {
+    const seed = day * 7
+    TAKEN.clear()
+    for (let i = 0; i < 2; i++) {
+      TAKEN.add(seed % SLOTS.length)
+      seed * 3
+    }
+
+    slotsLabel.textContent = `${day} de ${monthNames[month]}`
+    badge.style.display = 'none'
+
+    slotsEl.innerHTML = SLOTS.map((h, i) => {
+      const taken = [1, 3].includes((day + i) % 5)
+      return `<button class="demo-slot ${taken ? 'taken' : ''}" data-time="${h}" ${taken ? 'disabled' : ''}>${h}</button>`
+    }).join('')
+
+    slotsEl.querySelectorAll('.demo-slot:not(.taken)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        slotsEl.querySelectorAll('.demo-slot').forEach(b => b.classList.remove('selected'))
+        btn.classList.add('selected')
+        badge.style.display = 'flex'
+      })
+    })
+  }
+
+  cal.addEventListener('click', (e) => {
+    const target = (e.target as HTMLElement).closest('.demo-cal-day')
+    if (!target || target.classList.contains('past') || target.classList.contains('empty') || target.classList.contains('header')) return
+
+    cal.querySelectorAll('.demo-cal-day').forEach(d => d.classList.remove('selected'))
+    target.classList.add('selected')
+    renderSlots(parseInt(target.getAttribute('data-day') || '1'))
+  })
+
+  renderSlots(today)
 }

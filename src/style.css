@@ -906,17 +906,197 @@ a { text-decoration: none; color: inherit; }
 /* ═══ LOADER ═══ */
 .loader { text-align: center; padding: 72px; color: var(--color-ink-muted); font-size: 15px; }
 
-/* ═══ IMAGES ═══ */
-.section-image {
-  max-width: 600px;
+/* ═══ DEMO BOOKING WIDGET ═══ */
+.demo-widget {
   width: 100%;
-  margin: 0 auto 40px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 680px;
+  background: var(--color-surface-1);
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
-.section-image:hover { transform: translateY(-4px); }
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.demo-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.demo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.demo-dot.r { background: #ff6b6b; }
+.demo-dot.y { background: #fbbf24; }
+.demo-dot.g { background: #34d399; }
+
+.demo-url {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-ink-muted);
+  background: var(--color-surface-1);
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  font-weight: 500;
+}
+
+.demo-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 260px;
+}
+
+.demo-left {
+  padding: 20px;
+  border-right: 1px solid var(--color-border);
+}
+
+.demo-right {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.demo-cal-header {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--color-ink);
+}
+
+.demo-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.demo-cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 6px;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-cal-day:hover:not(.empty):not(.selected):not(.past) {
+  background: var(--color-surface-2);
+}
+
+.demo-cal-day.today {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.demo-cal-day.selected {
+  background: var(--color-accent);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.demo-cal-day.past {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.demo-cal-day.empty {
+  cursor: default;
+}
+
+.demo-cal-day.header {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-ink-muted);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  cursor: default;
+}
+
+.demo-slots-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  margin-bottom: 10px;
+}
+
+.demo-slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  flex: 1;
+}
+
+.demo-slot {
+  padding: 9px 8px;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--color-ink-secondary);
+  background: var(--color-surface-1);
+}
+
+.demo-slot:hover:not(.taken) {
+  border-color: var(--color-accent);
+  background: var(--color-accent-muted);
+  transform: scale(1.04);
+}
+
+.demo-slot.selected {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.demo-slot.taken {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  border-style: dashed;
+}
+
+.demo-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--color-success-muted);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-success);
+  margin-top: 8px;
+  animation: badge-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes badge-pop {
+  0% { opacity: 0; transform: scale(0.8) translateY(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
