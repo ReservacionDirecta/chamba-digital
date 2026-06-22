@@ -1,7 +1,7 @@
 export function initVideoScroll() {
-  const video = document.querySelector<HTMLVideoElement>('#hero-video')
+  const desktopVideo = document.querySelector<HTMLVideoElement>('#hero-video')
+  const mobileVideo = document.querySelector<HTMLVideoElement>('#hero-video-mobile')
   const navbar = document.querySelector<HTMLElement>('.navbar')
-  if (!video) return
 
   let duration = 0
   let targetTime = 0
@@ -12,7 +12,17 @@ export function initVideoScroll() {
   const SMOOTH_FACTOR = 0.12
   const SEEK_THRESHOLD = 0.03
 
-  async function preloadVideo() {
+  function getActiveVideo(): HTMLVideoElement | null {
+    if (window.innerWidth <= 768 && mobileVideo) return mobileVideo
+    return desktopVideo
+  }
+
+  function getOtherVideo(): HTMLVideoElement | null {
+    if (window.innerWidth <= 768 && desktopVideo) return desktopVideo
+    return mobileVideo
+  }
+
+  async function preloadVideo(video: HTMLVideoElement) {
     try {
       const response = await fetch(video.src)
       const blob = await response.blob()
@@ -25,14 +35,18 @@ export function initVideoScroll() {
   }
 
   function onLoadedMetadata() {
-    duration = video.duration
-    video.currentTime = 0
-    video.pause()
+    const active = getActiveVideo()
+    if (active) {
+      duration = active.duration
+      active.currentTime = 0
+      active.pause()
+    }
   }
 
   function onCanPlayThrough() {
     videoReady = true
-    video.pause()
+    const active = getActiveVideo()
+    if (active) active.pause()
     startAnimation()
   }
 
@@ -53,8 +67,14 @@ export function initVideoScroll() {
       currentSmoothTime = targetTime
     }
 
-    if (Math.abs(video.currentTime - currentSmoothTime) > SEEK_THRESHOLD) {
-      video.currentTime = currentSmoothTime
+    const active = getActiveVideo()
+    if (active && Math.abs(active.currentTime - currentSmoothTime) > SEEK_THRESHOLD) {
+      active.currentTime = currentSmoothTime
+    }
+
+    const other = getOtherVideo()
+    if (other && Math.abs(other.currentTime - currentSmoothTime) > SEEK_THRESHOLD) {
+      other.currentTime = currentSmoothTime
     }
 
     requestAnimationFrame(animate)
@@ -76,17 +96,30 @@ export function initVideoScroll() {
     }
   }
 
-  video.addEventListener('loadedmetadata', onLoadedMetadata)
-  video.addEventListener('canplaythrough', onCanPlayThrough)
+  if (desktopVideo) {
+    desktopVideo.addEventListener('loadedmetadata', onLoadedMetadata)
+    desktopVideo.addEventListener('canplaythrough', onCanPlayThrough)
+    preloadVideo(desktopVideo)
+  }
 
-  preloadVideo()
+  if (mobileVideo) {
+    mobileVideo.addEventListener('loadedmetadata', onLoadedMetadata)
+    mobileVideo.addEventListener('canplaythrough', onCanPlayThrough)
+    preloadVideo(mobileVideo)
+  }
 
   window.addEventListener('scroll', onScroll, { passive: true })
 
   return () => {
     animating = false
-    video.removeEventListener('loadedmetadata', onLoadedMetadata)
-    video.removeEventListener('canplaythrough', onCanPlayThrough)
+    if (desktopVideo) {
+      desktopVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
+      desktopVideo.removeEventListener('canplaythrough', onCanPlayThrough)
+    }
+    if (mobileVideo) {
+      mobileVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
+      mobileVideo.removeEventListener('canplaythrough', onCanPlayThrough)
+    }
     window.removeEventListener('scroll', onScroll)
   }
 }

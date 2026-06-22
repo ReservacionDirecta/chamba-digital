@@ -14,8 +14,18 @@ export function renderHome(container: HTMLDivElement) {
     <section class="hero-video-section">
       <video
         id="hero-video"
-        class="hero-video"
+        class="hero-video hero-video-desktop"
         src="/hero.mp4"
+        muted
+        playsinline
+        preload="auto"
+        loop
+        webkit-playsinline
+      ></video>
+      <video
+        id="hero-video-mobile"
+        class="hero-video hero-video-mobile"
+        src="/hero-vertical.mp4"
         muted
         playsinline
         preload="auto"

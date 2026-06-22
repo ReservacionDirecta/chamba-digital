@@ -208,6 +208,10 @@ a { text-decoration: none; color: inherit; }
   pointer-events: none;
 }
 
+.hero-video-mobile {
+  display: none;
+}
+
 .hero-overlay {
   position: fixed;
   top: 0;
@@ -1018,12 +1022,8 @@ a { text-decoration: none; color: inherit; }
   .step-actions { flex-direction: column; }
   .step-actions .btn { width: 100%; }
   .hero-content .hero-actions { flex-direction: column; align-items: center; }
-  .hero-video {
-    object-fit: cover;
-    object-position: center center;
-    width: 178%;
-    left: -39%;
-  }
+  .hero-video-desktop { display: none; }
+  .hero-video-mobile { display: block; }
 }
 
 @media (max-width: 480px) {
