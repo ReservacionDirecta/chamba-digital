@@ -1,7 +1,10 @@
 export function initVideoScroll() {
+  const heroScroll = document.getElementById('hero-scroll')
   const desktopVideo = document.querySelector<HTMLVideoElement>('#hero-video')
   const mobileVideo = document.querySelector<HTMLVideoElement>('#hero-video-mobile')
+  const overlay = document.getElementById('hero-overlay')
   const navbar = document.querySelector<HTMLElement>('.navbar')
+  if (!heroScroll) return
 
   let duration = 0
   let targetTime = 0
@@ -60,7 +63,6 @@ export function initVideoScroll() {
     if (!animating || !videoReady) return
 
     const diff = targetTime - currentSmoothTime
-
     if (Math.abs(diff) > SEEK_THRESHOLD) {
       currentSmoothTime += diff * SMOOTH_FACTOR
     } else {
@@ -72,20 +74,29 @@ export function initVideoScroll() {
       active.currentTime = currentSmoothTime
     }
 
-    const other = getOtherVideo()
-    if (other && Math.abs(other.currentTime - currentSmoothTime) > SEEK_THRESHOLD) {
-      other.currentTime = currentSmoothTime
-    }
-
     requestAnimationFrame(animate)
   }
 
   function onScroll() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight
-    const scrollPercent = Math.min(Math.max(scrollTop / docHeight, 0), 1)
+    const heroRect = heroScroll!.getBoundingClientRect()
+    const heroHeight = heroScroll!.offsetHeight - window.innerHeight
 
-    targetTime = scrollPercent * duration
+    const heroProgress = Math.min(Math.max(-heroRect.top / heroHeight, 0), 1)
+
+    targetTime = heroProgress * duration
+
+    if (overlay) {
+      const fadeStart = 0.5
+      const fadeEnd = 0.9
+      if (heroProgress < fadeStart) {
+        overlay.style.opacity = '1'
+      } else if (heroProgress > fadeEnd) {
+        overlay.style.opacity = '0'
+      } else {
+        overlay.style.opacity = String(1 - (heroProgress - fadeStart) / (fadeEnd - fadeStart))
+      }
+    }
 
     if (navbar) {
       if (scrollTop > 80) {
