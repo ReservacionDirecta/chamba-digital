@@ -1028,7 +1028,7 @@ a { text-decoration: none; color: inherit; }
   .step-actions .btn { width: 100%; }
   .hero-content .hero-actions { flex-direction: column; align-items: center; }
   .hero-video-desktop { display: none; }
-  .hero-video-mobile { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; min-height: 100dvh; object-fit: cover; object-position: center center; z-index: 0; pointer-events: none; }
+  .hero-video-mobile { display: block; position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: auto; height: 100vh; min-height: 100dvh; z-index: 0; pointer-events: none; }
 }
 
 @media (max-width: 480px) {
