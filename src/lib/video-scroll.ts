@@ -10,145 +10,91 @@ export function initVideoScroll() {
   if (!heroScroll) return
 
   let duration = 0
-  let targetTime = 0
-  let currentSmoothTime = 0
-  let animating = false
-  let videoReady = false
   let isMuted = true
-
-  const SMOOTH_FACTOR = 0.12
-  const SEEK_THRESHOLD = 0.03
+  let ticking = false
 
   function getActiveVideo(): HTMLVideoElement | null {
     if (window.innerWidth <= 768 && mobileVideo) return mobileVideo
     return desktopVideo
   }
 
-  async function preloadVideo(video: HTMLVideoElement) {
+  function initVideo(video: HTMLVideoElement) {
     video.muted = true
-    try {
-      const response = await fetch(video.src)
-      const blob = await response.blob()
-      const url = URL.createObjectURL(blob)
-      video.src = url
-      video.load()
-    } catch {
-      video.load()
-    }
-  }
+    video.play().catch(() => {})
 
-  function onLoadedMetadata() {
-    const active = getActiveVideo()
-    if (active) {
-      duration = active.duration
-      active.currentTime = 0
-    }
-  }
+    video.addEventListener('loadedmetadata', () => {
+      duration = video.duration
+      video.currentTime = 0
+    })
 
-  function onCanPlayThrough() {
-    videoReady = true
-    const active = getActiveVideo()
-    if (active) {
-      active.muted = true
-      active.play().catch(() => {})
-    }
-    startAnimation()
-  }
-
-  function startAnimation() {
-    if (animating) return
-    animating = true
-    animate()
-  }
-
-  function animate() {
-    if (!animating || !videoReady) return
-
-    const diff = targetTime - currentSmoothTime
-    if (Math.abs(diff) > SEEK_THRESHOLD) {
-      currentSmoothTime += diff * SMOOTH_FACTOR
-    } else {
-      currentSmoothTime = targetTime
-    }
-
-    const active = getActiveVideo()
-    if (active && Math.abs(active.currentTime - currentSmoothTime) > SEEK_THRESHOLD) {
-      active.currentTime = currentSmoothTime
-    }
-
-    requestAnimationFrame(animate)
+    video.addEventListener('canplay', () => {
+      video.play().catch(() => {})
+    })
   }
 
   function onScroll() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-    const heroRect = heroScroll!.getBoundingClientRect()
-    const heroHeight = heroScroll!.offsetHeight - window.innerHeight
+    if (ticking) return
+    ticking = true
 
-    const heroProgress = Math.min(Math.max(-heroRect.top / heroHeight, 0), 1)
-
-    targetTime = heroProgress * duration
-
-    if (overlay) {
-      const fadeStart = 0.5
-      const fadeEnd = 0.9
-      if (heroProgress < fadeStart) {
-        overlay.style.opacity = '1'
-      } else if (heroProgress > fadeEnd) {
-        overlay.style.opacity = '0'
-      } else {
-        overlay.style.opacity = String(1 - (heroProgress - fadeStart) / (fadeEnd - fadeStart))
+    requestAnimationFrame(() => {
+      const active = getActiveVideo()
+      if (!active || !duration) {
+        ticking = false
+        return
       }
-    }
 
-    if (navbar) {
-      if (scrollTop > 80) {
-        navbar.classList.add('scrolled')
-      } else {
-        navbar.classList.remove('scrolled')
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const heroHeight = heroScroll!.offsetHeight - window.innerHeight
+      const heroProgress = Math.min(Math.max(scrollTop / heroHeight, 0), 1)
+
+      active.currentTime = heroProgress * duration
+
+      if (heroProgress < 0.01) {
+        active.play().catch(() => {})
       }
-    }
+
+      if (overlay) {
+        if (heroProgress < 0.5) {
+          overlay.style.opacity = '1'
+        } else if (heroProgress > 0.9) {
+          overlay.style.opacity = '0'
+        } else {
+          overlay.style.opacity = String(1 - (heroProgress - 0.5) / 0.4)
+        }
+      }
+
+      if (navbar) {
+        if (scrollTop > 80) {
+          navbar.classList.add('scrolled')
+        } else {
+          navbar.classList.remove('scrolled')
+        }
+      }
+
+      ticking = false
+    })
   }
 
   function toggleAudio() {
     isMuted = !isMuted
     const active = getActiveVideo()
     if (active) active.muted = isMuted
-
     if (audioOnIcon && audioOffIcon) {
       audioOnIcon.style.display = isMuted ? 'none' : 'block'
       audioOffIcon.style.display = isMuted ? 'block' : 'none'
     }
   }
 
-  if (audioBtn) {
-    audioBtn.addEventListener('click', toggleAudio)
-  }
+  if (audioBtn) audioBtn.addEventListener('click', toggleAudio)
 
-  if (desktopVideo) {
-    desktopVideo.addEventListener('loadedmetadata', onLoadedMetadata)
-    desktopVideo.addEventListener('canplaythrough', onCanPlayThrough)
-    preloadVideo(desktopVideo)
-  }
-
-  if (mobileVideo) {
-    mobileVideo.addEventListener('loadedmetadata', onLoadedMetadata)
-    mobileVideo.addEventListener('canplaythrough', onCanPlayThrough)
-    preloadVideo(mobileVideo)
-  }
+  if (desktopVideo) initVideo(desktopVideo)
+  if (mobileVideo) initVideo(mobileVideo)
 
   window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
 
   return () => {
-    animating = false
     if (audioBtn) audioBtn.removeEventListener('click', toggleAudio)
-    if (desktopVideo) {
-      desktopVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
-      desktopVideo.removeEventListener('canplaythrough', onCanPlayThrough)
-    }
-    if (mobileVideo) {
-      mobileVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
-      mobileVideo.removeEventListener('canplaythrough', onCanPlayThrough)
-    }
     window.removeEventListener('scroll', onScroll)
   }
 }
