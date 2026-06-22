@@ -78,7 +78,7 @@ export function renderSubscription(container: HTMLDivElement) {
             </div>
             <div class="step-actions">
               <button class="btn btn-ghost" id="sub-back">← Cambiar plan</button>
-              <button class="btn btn-primary btn-lg" id="sub-pay">💳 Pagar y activar</button>
+              <button class="btn btn-primary btn-lg" id="sub-pay"><img src="/icons/card.svg" alt="" width="18" height="18" style="vertical-align:-3px" /> Pagar y activar</button>
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ export async function renderBooking(container: HTMLDivElement, serviceId: string
                         <h3>${s.name}</h3>
                         <p>${s.description}</p>
                         <div class="service-meta">
-                          <span class="service-duration">⏱ ${s.duration} min</span>
+                          <span class="service-duration"><img src="/icons/timer.svg" alt="" width="14" height="14" style="vertical-align:-2px" /> ${s.duration} min</span>
                           <span class="service-price">$${s.price} USD</span>
                         </div>
                       </div>
@@ -143,7 +143,7 @@ export async function renderBooking(container: HTMLDivElement, serviceId: string
                 <div class="payment-methods">
                   <h3 class="payment-methods-title">Método de pago</h3>
                   <button class="payment-method-card" id="btn-polar">
-                    <div class="pm-icon">💳</div>
+                    <div class="pm-icon"><img src="/icons/card.svg" alt="" width="28" height="28" /></div>
                     <div class="pm-info">
                       <strong>Tarjeta de crédito / débito</strong>
                       <span>Pago seguro vía Polar.sh</span>
@@ -151,7 +151,7 @@ export async function renderBooking(container: HTMLDivElement, serviceId: string
                     <div class="pm-arrow">→</div>
                   </button>
                   <button class="payment-method-card" id="btn-whatsapp-pay">
-                    <div class="pm-icon">💬</div>
+                    <div class="pm-icon"><img src="/icons/chat.svg" alt="" width="28" height="28" /></div>
                     <div class="pm-info">
                       <strong>WhatsApp</strong>
                       <span>Confirma tu pago por mensaje</span>
@@ -159,7 +159,7 @@ export async function renderBooking(container: HTMLDivElement, serviceId: string
                     <div class="pm-arrow">→</div>
                   </button>
                   <button class="payment-method-card" id="btn-email-pay">
-                    <div class="pm-icon">📧</div>
+                    <div class="pm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><rect x="2" y="5" width="24" height="18" rx="2"/><path d="M2 9l12 6 12-6"/></svg></div>
                     <div class="pm-info">
                       <strong>Correo electrónico</strong>
                       <span>Recibe instrucciones por email</span>

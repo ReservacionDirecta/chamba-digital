@@ -13,7 +13,7 @@ export function renderHome(container: HTMLDivElement) {
 
     <section class="hero">
       <div class="container">
-        <div class="hero-badge">🚀 Web + Motor de Reservas + WhatsApp</div>
+        <div class="hero-badge"><img src="/icons/rocket.svg" alt="" width="18" height="18" /> Web + Motor de Reservas + WhatsApp</div>
         <h1>Tu negocio,<br/><span class="gradient">reservas automáticas</span></h1>
         <p class="hero-sub">Por solo $30/mes te entregamos una web profesional con motor de reservas y WhatsApp conectado. Peluquerías, consultorios, inmobiliarias, spas, academias... cualquier negocio que agende citas es nuestro cliente.</p>
         <div class="hero-actions">
@@ -32,32 +32,32 @@ export function renderHome(container: HTMLDivElement) {
         <p class="section-sub" data-reveal="fade-up" data-reveal-delay="100">No vendemos productos. Vendemos un servicio de crecimiento constante.</p>
         <div class="features-grid">
           <div class="feature-card" data-reveal="fade-up" data-reveal-delay="100">
-            <div class="feature-icon">📅</div>
+            <img src="/icons/calendar.svg" alt="" width="36" height="36" class="feature-icon" />
             <h3>Motor de reservas integrado</h3>
             <p>Tus clientes agendan servicios 24/7. Calendario inteligente que bloquea horarios ocupados y solo muestra disponibilidad real.</p>
           </div>
           <div class="feature-card" data-reveal="fade-up" data-reveal-delay="200">
-            <div class="feature-icon">💳</div>
+            <img src="/icons/card.svg" alt="" width="36" height="36" class="feature-icon" />
             <h3>Pagos online con Polar.sh</h3>
             <p>Los clientes pagan al reservar. Tú recibes el dinero directamente. Sin intermediarios, sin comisiones ocultas.</p>
           </div>
           <div class="feature-card" data-reveal="fade-up" data-reveal-delay="300">
-            <div class="feature-icon">💬</div>
+            <img src="/icons/chat.svg" alt="" width="36" height="36" class="feature-icon" />
             <h3>Botón de WhatsApp</h3>
             <p>Botón flotante para que tus clientes te contacten directo por WhatsApp con un mensaje predefinido. Cero fricción.</p>
           </div>
           <div class="feature-card" data-reveal="fade-up" data-reveal-delay="400">
-            <div class="feature-icon">⚡</div>
+            <img src="/icons/bolt.svg" alt="" width="36" height="36" class="feature-icon" />
             <h3>Confirmación instantánea</h3>
             <p>Reserva → Pago → Confirmación automática. Sin emails perdidos, sin llamadas innecesarias. Todo fluye solo.</p>
           </div>
           <div class="feature-card" data-reveal="fade-up" data-reveal-delay="500">
-            <div class="feature-icon">📱</div>
+            <img src="/icons/responsive.svg" alt="" width="36" height="36" class="feature-icon" />
             <h3>100% responsive</h3>
             <p>Tu web funciona perfecto en celular, tablet y escritorio. Tus clientes reservan desde donde sea.</p>
           </div>
           <div class="feature-card" data-reveal="fade-up" data-reveal-delay="600">
-            <div class="feature-icon">🔧</div>
+            <img src="/icons/settings.svg" alt="" width="36" height="36" class="feature-icon" />
             <h3>Tu web es un organismo vivo</h3>
             <p>No es un producto cerrado. Tu web se pulsa mes a mes según los datos de tus clientes reales. Progreso, no perfección al día uno.</p>
           </div>

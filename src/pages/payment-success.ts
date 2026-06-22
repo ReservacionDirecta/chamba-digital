@@ -11,7 +11,7 @@ export async function renderPaymentSuccess(container: HTMLDivElement, bookingId:
     <section class="success-page">
       <div class="container">
         <div class="success-card">
-          <div class="success-icon">✅</div>
+          <div class="success-icon"><img src="/icons/check.svg" alt="" width="64" height="64" /></div>
           <h1>¡Pago confirmado!</h1>
           <p class="success-sub">Tu reserva está confirmada. Recibirás un email con todos los detalles.</p>
 
@@ -48,7 +48,7 @@ export async function renderPaymentSuccess(container: HTMLDivElement, bookingId:
 
           <div class="success-actions">
             <a href="#/" class="btn btn-primary">Volver al inicio</a>
-            <a href="https://wa.me/1234567890?text=Hola%2C%20tengo%20una%20reserva%20confirmada%20%23${bookingId.slice(-8).toUpperCase()}" target="_blank" class="btn btn-whatsapp">💬 Contactar por WhatsApp</a>
+            <a href="https://wa.me/1234567890?text=Hola%2C%20tengo%20una%20reserva%20confirmada%20%23${bookingId.slice(-8).toUpperCase()}" target="_blank" class="btn btn-whatsapp"><img src="/icons/chat.svg" alt="" width="18" height="18" style="filter:brightness(0) invert(1)" /> Contactar por WhatsApp</a>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ export async function renderPaymentSuccess(container: HTMLDivElement, bookingId:
       }
     } catch {
       const infoEl = container.querySelector('#booking-info')
-      if (infoEl) infoEl.innerHTML = '<p style="color:var(--ink-tertiary);">No se pudieron cargar los detalles.</p>'
+      if (infoEl) infoEl.innerHTML = '<p style="color:var(--color-ink-muted);">No se pudieron cargar los detalles.</p>'
     }
   }
 }

@@ -9,7 +9,7 @@ export function renderSubscriptionSuccess(container: HTMLDivElement) {
     <section class="success-page">
       <div class="container">
         <div class="success-card">
-          <div class="success-icon">🎉</div>
+          <div class="success-icon"><img src="/icons/party.svg" alt="" width="64" height="64" /></div>
           <h1>¡Bienvenido a bordo!</h1>
           <p class="success-sub">Tu suscripción está activa. Tu web está siendo configurada.</p>
 
@@ -42,7 +42,7 @@ export function renderSubscriptionSuccess(container: HTMLDivElement) {
 
           <div class="success-actions">
             <a href="#/" class="btn btn-primary">Volver al inicio</a>
-            <a href="https://wa.me/1234567890?text=Hola%2C%20acabo%20de%20suscribirme%20a%20chamba.digital" target="_blank" class="btn btn-whatsapp">💬 Contactar por WhatsApp</a>
+            <a href="https://wa.me/1234567890?text=Hola%2C%20acabo%20de%20suscribirme%20a%20chamba.digital" target="_blank" class="btn btn-whatsapp"><img src="/icons/chat.svg" alt="" width="18" height="18" style="filter:brightness(0) invert(1)" /> Contactar por WhatsApp</a>
           </div>
         </div>
       </div>
