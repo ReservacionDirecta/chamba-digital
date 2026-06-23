@@ -41,7 +41,7 @@ export function renderSubscriptionSuccess(container: HTMLDivElement) {
           </div>
 
           <div class="success-actions">
-            <a href="#/" class="btn btn-primary">Volver al inicio</a>
+            <a href="#/mi-proyecto" class="btn btn-primary">Configurar mi Proyecto</a>
             <a href="https://wa.me/1234567890?text=Hola%2C%20acabo%20de%20suscribirme%20a%20chamba.digital" target="_blank" class="btn btn-whatsapp"><img src="/icons/chat.svg" alt="" width="18" height="18" style="filter:brightness(0) invert(1)" /> Contactar por WhatsApp</a>
           </div>
         </div>

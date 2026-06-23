@@ -122,6 +122,9 @@ export function renderSubscription(container: HTMLDivElement) {
       return
     }
 
+    // Save metadata for the onboarding wizard
+    localStorage.setItem('last_subscription', JSON.stringify({ name, email, businessName, phone, plan: chosenPlan }))
+
     try {
       const res = await fetch('/api/checkout/subscription', {
         method: 'POST',
