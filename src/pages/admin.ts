@@ -57,18 +57,18 @@ export async function renderAdmin(container: HTMLDivElement) {
 
   function updateView() {
     container.innerHTML = `
-      <nav class="navbar scrolled" style="box-shadow: 0 1px 0 rgba(0,0,0,0.05);">
+      <nav class="navbar scrolled">
         <div class="container nav-inner">
           <a href="#/" class="logo" style="color:var(--color-ink)">chamba<span>.digital</span></a>
-          <div style="display:flex; gap:8px;">
-            <button class="btn ${currentTab === 'projects' ? 'btn-primary' : 'btn-ghost'} btn-sm tab-btn" data-tab="projects" style="border-radius:6px;">Proyectos & CRM</button>
-            <button class="btn ${currentTab === 'services' ? 'btn-primary' : 'btn-ghost'} btn-sm tab-btn" data-tab="services" style="border-radius:6px;">Servicios & Reservas</button>
-            <button id="admin-logout-btn" class="btn btn-outline btn-sm" style="border-radius:6px; padding: 8px 14px;">Cerrar sesión</button>
+          <div class="admin-nav-tabs">
+            <button class="btn ${currentTab === 'projects' ? 'btn-primary' : 'btn-ghost'} btn-sm tab-btn" data-tab="projects">Proyectos & CRM</button>
+            <button class="btn ${currentTab === 'services' ? 'btn-primary' : 'btn-ghost'} btn-sm tab-btn" data-tab="services">Servicios & Reservas</button>
+            <button id="admin-logout-btn" class="btn btn-outline btn-sm admin-logout-btn">Cerrar sesión</button>
           </div>
         </div>
       </nav>
 
-      <section class="admin-page" style="margin-top: 96px; padding-bottom: 64px;">
+      <section class="admin-page">
         <div class="container">
           ${currentTab === 'projects' ? renderProjectsTab() : renderServicesTab()}
         </div>
@@ -127,24 +127,24 @@ export async function renderAdmin(container: HTMLDivElement) {
       </div>
 
       <!-- Kanban Grid -->
-      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; overflow-x:auto;">
+      <div class="admin-kanban">
         ${columns.map(col => {
           const colProjects = filtered.filter(p => p.status === col.key)
           return `
-              <div style="background:var(--color-surface-0); border:1px solid var(--color-border); border-radius:var(--radius-card); padding:16px; min-height:400px; display:flex; flex-direction:column; gap:12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid var(--color-border);">
+              <div class="admin-kanban-col">
+              <div class="admin-kanban-col-header">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <span style="font-size:14px;">${col.icon}</span>
                   <span style="font-size:13px; font-weight:700; color:var(--color-ink);">${col.title}</span>
                 </div>
-                <span style="background:var(--color-surface-3); color:var(--color-ink-secondary); font-size:11px; padding:2px 8px; border-radius:var(--radius-pill); font-weight:700;">${colProjects.length}</span>
+                <span class="admin-kanban-count">${colProjects.length}</span>
               </div>
               
-              <div style="display:flex; flex-direction:column; gap:12px; flex-grow:1;">
+              <div class="admin-kanban-cards">
                 ${colProjects.map(proj => {
                   const projId = proj._id || proj.id
                   return `
-                    <div class="project-card" data-id="${projId}" style="background:white; border:1px solid var(--color-border-strong); border-radius:10px; padding:14px; cursor:pointer; transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                    <div class="project-card" data-id="${projId}">
                       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
                         <span style="font-size:10px; font-weight:700; text-transform:uppercase; padding:3px 8px; border-radius:var(--radius-pill); background:${proj.plan === 'base' ? 'var(--color-accent-muted)' : 'rgba(168, 85, 247, 0.08)'}; color:${proj.plan === 'base' ? 'var(--color-accent)' : '#a855f7'};">
                           Plan ${proj.plan}
@@ -162,12 +162,12 @@ export async function renderAdmin(container: HTMLDivElement) {
                         
                         <div style="display:flex; gap:4px;">
                           ${col.key !== 'Recibido' ? `
-                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) - 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:28px; height:28px; border-radius:var(--radius-xs); cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--color-accent)';this.style.color='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)';this.style.color='var(--color-ink-secondary)'">
+                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) - 1].key}">
                               &larr;
                             </button>
                           ` : ''}
                           ${col.key !== 'Completado' ? `
-                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) + 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:28px; height:28px; border-radius:var(--radius-xs); cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--color-accent)';this.style.color='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)';this.style.color='var(--color-ink-secondary)'">
+                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) + 1].key}">
                               &rarr;
                             </button>
                           ` : ''}
@@ -177,7 +177,7 @@ export async function renderAdmin(container: HTMLDivElement) {
                   `
                 }).join('')}
                 ${colProjects.length === 0 ? `
-                  <div style="font-size:12px; color:var(--color-ink-muted); text-align:center; padding:32px 16px; border:1px dashed var(--color-border); border-radius:10px; background:rgba(255,255,255,0.4);">
+                  <div class="admin-kanban-empty">
                     Sin proyectos
                   </div>
                 ` : ''}
