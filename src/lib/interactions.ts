@@ -44,7 +44,7 @@ export function initTiltCards() {
 
 export function initRipple() {
   document.addEventListener('click', (e) => {
-    const target = (e.target as HTMLElement).closest('[data-ripple]')
+    const target = (e.target as HTMLElement).closest('[data-ripple]') as HTMLElement | null
     if (!target) return
 
     const rect = target.getBoundingClientRect()

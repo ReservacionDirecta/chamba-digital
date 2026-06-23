@@ -22,6 +22,11 @@ export function initVideoScroll() {
     video.muted = true
     video.play().catch(() => {})
 
+    if (video.readyState >= 1) { // HAVE_METADATA or higher
+      duration = video.duration
+      video.currentTime = 0
+    }
+
     video.addEventListener('loadedmetadata', () => {
       duration = video.duration
       video.currentTime = 0
@@ -38,7 +43,16 @@ export function initVideoScroll() {
 
     requestAnimationFrame(() => {
       const active = getActiveVideo()
-      if (!active || !duration) {
+      if (!active) {
+        ticking = false
+        return
+      }
+
+      if (!duration && active.duration) {
+        duration = active.duration
+      }
+
+      if (!duration) {
         ticking = false
         return
       }
@@ -47,10 +61,15 @@ export function initVideoScroll() {
       const heroHeight = heroScroll!.offsetHeight - window.innerHeight
       const heroProgress = Math.min(Math.max(scrollTop / heroHeight, 0), 1)
 
-      active.currentTime = heroProgress * duration
-
       if (heroProgress < 0.01) {
-        active.play().catch(() => {})
+        if (active.paused) {
+          active.play().catch(() => {})
+        }
+      } else {
+        if (!active.paused) {
+          active.pause()
+        }
+        active.currentTime = heroProgress * duration
       }
 
       if (overlay) {
