@@ -32,6 +32,7 @@
   --radius-btn: 10px;
   --radius-pill: 100px;
   --radius-xs: 6px;
+  --height-navbar: 72px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,11 +57,13 @@ a { text-decoration: none; color: inherit; }
   top: 0;
   left: 0;
   width: 100%;
+  height: var(--height-navbar);
   z-index: 200;
   background: transparent;
-  padding: 14px 0;
+  padding: 0;
   transition: all 0.3s ease;
   border-bottom: 1px solid transparent;
+  box-sizing: border-box;
 }
 
 .navbar.scrolled {
@@ -78,6 +81,7 @@ a { text-decoration: none; color: inherit; }
   margin: 0 auto;
   padding: 0 24px;
   box-sizing: border-box;
+  height: 100%;
 }
 
 .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: white; transition: color 0.3s ease; }
@@ -184,7 +188,7 @@ a { text-decoration: none; color: inherit; }
   width: 100%;
   height: 100%;
   text-align: center;
-  padding: 0 24px;
+  padding: var(--height-navbar) 24px 0;
   box-sizing: border-box;
 }
 
@@ -642,7 +646,14 @@ a { text-decoration: none; color: inherit; }
   .nav-links a:not(.btn) { display: none; }
   .nav-links .btn { padding: 8px 16px; font-size: 13px; }
 
-  .hero-content { padding: 0 20px; }
+  .hero-sticky {
+    height: 70vh;
+    height: 70dvh;
+  }
+  .hero-scroll {
+    height: 180vh;
+  }
+  .hero-content { padding: var(--height-navbar) 20px 0; }
   .hero-content .hero-badge { margin-bottom: 20px; font-size: 12px; padding: 7px 14px; }
   .hero-content h1 { font-size: 32px; margin-bottom: 16px; }
   .hero-content .hero-sub { font-size: 14px; margin-bottom: 28px; max-width: 340px; }

@@ -58,7 +58,9 @@ export function initVideoScroll() {
       }
 
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-      const heroHeight = heroScroll!.offsetHeight - window.innerHeight
+      const stickyContainer = heroScroll!.querySelector('.hero-sticky') as HTMLElement
+      const stickyHeight = stickyContainer ? stickyContainer.offsetHeight : window.innerHeight
+      const heroHeight = heroScroll!.offsetHeight - stickyHeight
       const heroProgress = Math.min(Math.max(scrollTop / heroHeight, 0), 1)
 
       if (heroProgress < 0.01) {
