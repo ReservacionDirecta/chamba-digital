@@ -1,4 +1,34 @@
 export function renderMyProject(container: HTMLDivElement) {
+  const loggedInUser = localStorage.getItem('logged_in_user')
+  
+  if (!loggedInUser) {
+    container.innerHTML = `
+      <nav class="navbar scrolled">
+        <div class="container nav-inner">
+          <a href="#/" class="logo">chamba<span>.digital</span></a>
+        </div>
+      </nav>
+      <section class="booking-page" style="margin-top: 120px; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+        <div class="container" style="max-width: 480px; width: 100%;">
+          <div class="sub-form-card" style="padding: 40px; border: 1px solid var(--color-border); border-radius: 16px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #fef3c7; color: #d97706; border-radius: 50%; margin-bottom: 20px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h2 style="font-weight: 800; font-size: 22px; margin-bottom: 12px; letter-spacing: -0.02em;">Acceso Restringido</h2>
+            <p style="color: var(--color-ink-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">
+              Debes iniciar sesión con tu cuenta de cliente para acceder y configurar tu proyecto web.
+            </p>
+            <a href="#/login" class="btn btn-primary btn-block" style="height: 44px; display: flex; align-items: center; justify-content: center;">Iniciar Sesión</a>
+          </div>
+        </div>
+      </section>
+    `
+    return
+  }
+
   // Get active subscription data to auto-fill
   let activeSub = { name: '', email: '', businessName: '', phone: '', plan: 'base' }
   try {
@@ -6,9 +36,9 @@ export function renderMyProject(container: HTMLDivElement) {
     if (rawSub) activeSub = JSON.parse(rawSub)
   } catch {}
 
-  // Check if there is already a project for this business
+  // Check if there is already a project for this business (using logged in user email as ID)
   let existingProject = {
-    id: activeSub.email || 'guest',
+    id: loggedInUser,
     businessName: activeSub.businessName || '',
     niche: 'Peluquerías',
     webType: 'Moderna',
@@ -24,7 +54,7 @@ export function renderMyProject(container: HTMLDivElement) {
   }
 
   try {
-    const rawProj = localStorage.getItem(`project_${existingProject.id}`)
+    const rawProj = localStorage.getItem(`project_${loggedInUser}`)
     if (rawProj) {
       existingProject = JSON.parse(rawProj)
     }
@@ -32,9 +62,17 @@ export function renderMyProject(container: HTMLDivElement) {
 
   container.innerHTML = `
     <nav class="navbar scrolled">
-      <div class="container nav-inner">
+      <div class="container nav-inner" style="display: flex; justify-content: space-between; align-items: center;">
         <a href="#/" class="logo" style="color:var(--color-ink)">chamba<span>.digital</span></a>
-        <a href="#/" class="btn btn-ghost btn-sm">← Volver al inicio</a>
+        
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <span style="font-size: 13px; color: var(--color-ink-secondary); font-weight: 500; background: var(--color-surface-1); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--color-border);">
+            👤 ${loggedInUser}
+          </span>
+          <button id="logout-btn" class="btn btn-outline btn-sm" style="border-radius: 6px; height: 32px; padding: 0 12px; font-size: 12px;">
+            Cerrar Sesión
+          </button>
+        </div>
       </div>
     </nav>
 
@@ -146,15 +184,23 @@ export function renderMyProject(container: HTMLDivElement) {
     existingProject.notes = notes
 
     // Save to projects registry
-    localStorage.setItem(`project_${existingProject.id}`, JSON.stringify(existingProject))
+    localStorage.setItem(`project_${loggedInUser}`, JSON.stringify(existingProject))
 
     // Also register in the active projects list
     const activeProjects = JSON.parse(localStorage.getItem('active_projects_list') || '[]')
-    if (!activeProjects.includes(existingProject.id)) {
-      activeProjects.push(existingProject.id)
+    if (!activeProjects.includes(loggedInUser)) {
+      activeProjects.push(loggedInUser)
       localStorage.setItem('active_projects_list', JSON.stringify(activeProjects))
     }
 
     alert('¡Configuración guardada con éxito! El administrador ha recibido tu solicitud en el panel.')
+  })
+
+  // Logout button handler
+  const logoutBtn = container.querySelector('#logout-btn') as HTMLButtonElement
+  logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    localStorage.removeItem('logged_in_user')
+    window.location.hash = '#/'
   })
 }

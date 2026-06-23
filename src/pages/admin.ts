@@ -50,6 +50,35 @@ const defaultProjects = [
 ]
 
 export async function renderAdmin(container: HTMLDivElement) {
+  const loggedInUser = localStorage.getItem('logged_in_user')
+  if (loggedInUser !== 'admin@chamba.digital') {
+    container.innerHTML = `
+      <nav class="navbar scrolled">
+        <div class="container nav-inner">
+          <a href="#/" class="logo">chamba<span>.digital</span></a>
+        </div>
+      </nav>
+      <section class="booking-page" style="margin-top: 120px; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+        <div class="container" style="max-width: 480px; width: 100%;">
+          <div class="sub-form-card" style="padding: 40px; border: 1px solid var(--color-border); border-radius: 16px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #fee2e2; color: #ef4444; border-radius: 50%; margin-bottom: 20px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h2 style="font-weight: 800; font-size: 22px; margin-bottom: 12px; letter-spacing: -0.02em;">Acceso de Administrador Requerido</h2>
+            <p style="color: var(--color-ink-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">
+              Esta sección está reservada para el super admin. Por favor inicia sesión con tu cuenta de administrador.
+            </p>
+            <a href="#/login" class="btn btn-primary btn-block" style="height: 44px; display: flex; align-items: center; justify-content: center;">Iniciar Sesión como Admin</a>
+          </div>
+        </div>
+      </section>
+    `
+    return
+  }
+
   container.innerHTML = `<div class="loader">Cargando panel...</div>`
 
   let services: any[] = []
@@ -94,7 +123,7 @@ export async function renderAdmin(container: HTMLDivElement) {
           <div style="display:flex; gap:8px;">
             <button class="btn ${currentTab === 'projects' ? 'btn-primary' : 'btn-ghost'} btn-sm tab-btn" data-tab="projects" style="border-radius:6px;">Proyectos & CRM</button>
             <button class="btn ${currentTab === 'services' ? 'btn-primary' : 'btn-ghost'} btn-sm tab-btn" data-tab="services" style="border-radius:6px;">Servicios & Reservas</button>
-            <a href="#/" class="btn btn-outline btn-sm" style="border-radius:6px; padding: 8px 14px;">Volver</a>
+            <button id="admin-logout-btn" class="btn btn-outline btn-sm" style="border-radius:6px; padding: 8px 14px;">Cerrar sesión</button>
           </div>
         </div>
       </nav>
@@ -404,6 +433,15 @@ export async function renderAdmin(container: HTMLDivElement) {
         updateView()
       })
     })
+
+    const logoutBtn = container.querySelector('#admin-logout-btn')
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        localStorage.removeItem('logged_in_user')
+        window.location.hash = '#/'
+      })
+    }
 
     if (currentTab === 'projects') {
       // Filters

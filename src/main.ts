@@ -7,6 +7,7 @@ import { renderAdmin } from './pages/admin.js'
 import { renderSubscription } from './pages/subscription.js'
 import { renderSubscriptionSuccess } from './pages/subscription-success.js'
 import { renderMyProject } from './pages/my-project.js'
+import { renderLogin } from './pages/login.js'
 import { initScrollReveal } from './lib/animations.js'
 import { initAllInteractions } from './lib/interactions.js'
 import { updateSEO } from './lib/seo.js'
@@ -45,6 +46,9 @@ function router() {
       break
     case '/mi-proyecto':
       renderMyProject(app)
+      break
+    case '/login':
+      renderLogin(app)
       break
     case '/admin':
       renderAdmin(app)

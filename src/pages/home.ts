@@ -6,6 +6,7 @@ export function renderHome(container: HTMLDivElement) {
         <div class="nav-links">
           <a href="#features">Cómo funciona</a>
           <a href="#pricing">Planes</a>
+          <a href="#/login" class="btn btn-ghost btn-sm" style="color: var(--color-ink); margin-right: 8px;">Iniciar sesión</a>
           <a href="#/suscripcion" class="btn btn-primary btn-sm" data-ripple>Comenzar</a>
         </div>
       </div>
