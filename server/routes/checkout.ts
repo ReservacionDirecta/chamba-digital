@@ -102,6 +102,14 @@ checkoutRouter.post('/subscription', async (req, res) => {
       commissionRate: plan === 'dedicado' ? 6 : 0,
     })
 
+    // If using default / dummy token, bypass Polar API call and enter demo mode
+    if (token === 'your_polar_access_token' || token.startsWith('your_') || !process.env.POLAR_PRODUCT_BASE) {
+      return res.json({
+        isDemo: true,
+        subscriptionId: subscription._id,
+      })
+    }
+
     const origin = req.headers.origin || 'http://localhost:5173'
 
     const response = await fetch(`${POLAR_API}/checkouts`, {

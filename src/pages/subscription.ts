@@ -131,9 +131,19 @@ export function renderSubscription(container: HTMLDivElement) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, businessName, phone, plan: chosenPlan }),
       })
+
+      if (!res.ok) {
+        const errData = await res.json()
+        alert(errData.error || 'Error al procesar la suscripción. Intenta de nuevo.')
+        return
+      }
+
       const data = await res.json()
       if (data.checkoutUrl) {
         window.location.href = data.checkoutUrl
+      } else if (data.isDemo) {
+        // Trigger the premium simulated credit card sheet
+        openPaymentSimulator(data.subscriptionId)
       } else {
         window.location.hash = '#/suscripcion-exitosa'
       }
@@ -141,4 +151,126 @@ export function renderSubscription(container: HTMLDivElement) {
       alert('Error al procesar. Intenta de nuevo.')
     }
   })
+
+  function openPaymentSimulator(subscriptionId: string) {
+    const modal = document.createElement('div')
+    modal.id = 'payment-simulator-modal'
+    modal.innerHTML = `
+      <div id="payment-simulator-backdrop" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.45); backdrop-filter:blur(6px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px;">
+        <div style="background:white; border-radius:16px; border:1px solid var(--color-border-strong); width:100%; max-width:420px; box-shadow:0 24px 64px rgba(0,0,0,0.18); padding:32px; display:flex; flex-direction:column; gap:24px;">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border); padding-bottom:16px;">
+            <div>
+              <h3 style="margin:0; font-size:17px; font-weight:800; letter-spacing:-0.02em;">Pago Seguro (Simulador)</h3>
+              <span style="font-size:12px; color:var(--color-ink-muted);">Modo de demostración local</span>
+            </div>
+            <button id="close-sim-btn" style="border:none; background:transparent; font-size:24px; color:var(--color-ink-secondary); cursor:pointer; padding:0 8px;">&times;</button>
+          </div>
+
+          <div style="background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--color-ink-secondary);">
+              <span>Suscripción:</span>
+              <strong style="color:var(--color-ink);">${chosenPlan === 'base' ? 'Plan Base' : 'Plan Dedicado'}</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--color-ink-secondary);">
+              <span>Monto Mensual:</span>
+              <strong style="color:var(--color-ink);">${chosenPlan === 'base' ? '$30.00' : '$99.00'} USD</strong>
+            </div>
+          </div>
+
+          <form id="sim-payment-form" style="display:flex; flex-direction:column; gap:16px;">
+            <div class="form-group">
+              <label class="input-label" style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Número de Tarjeta</label>
+              <input type="text" id="sim-card-num" class="input" style="height:42px; font-size:14px; letter-spacing:2px;" placeholder="4000 1234 5678 9010" required />
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <div class="form-group">
+                <label class="input-label" style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Expira (MM/AA)</label>
+                <input type="text" id="sim-card-exp" class="input" style="height:42px; font-size:14px;" placeholder="12/29" required />
+              </div>
+              <div class="form-group">
+                <label class="input-label" style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">CVC</label>
+                <input type="password" id="sim-card-cvc" class="input" style="height:42px; font-size:14px;" placeholder="***" required />
+              </div>
+            </div>
+
+            <button type="submit" id="sim-submit-btn" class="btn btn-primary btn-block btn-lg" style="box-shadow:none; height:46px; border-radius:8px; margin-top:8px; font-weight:700;">
+              Pagar $${chosenPlan === 'base' ? '30.00' : '99.00'} USD
+            </button>
+          </form>
+
+        </div>
+      </div>
+    `
+
+    document.body.appendChild(modal)
+
+    const closeBtn = modal.querySelector('#close-sim-btn')
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.remove()
+      })
+    }
+
+    const backdrop = modal.querySelector('#payment-simulator-backdrop')
+    if (backdrop) {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          modal.remove()
+        }
+      })
+    }
+
+    // Auto format card number spacing
+    const cardInput = modal.querySelector('#sim-card-num') as HTMLInputElement
+    if (cardInput) {
+      cardInput.addEventListener('input', () => {
+        let val = cardInput.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+        let matches = val.match(/\d{4,16}/g)
+        let match = (matches && matches[0]) || ''
+        let parts = []
+        for (let i = 0, len = match.length; i < len; i += 4) {
+          parts.push(match.substring(i, i + 4))
+        }
+        if (parts.length > 0) {
+          cardInput.value = parts.join(' ')
+        } else {
+          cardInput.value = val
+        }
+      })
+    }
+
+    // Auto format card expiration date
+    const expInput = modal.querySelector('#sim-card-exp') as HTMLInputElement
+    if (expInput) {
+      expInput.addEventListener('input', () => {
+        let val = expInput.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+        if (val.length >= 2) {
+          expInput.value = val.substring(0, 2) + '/' + val.substring(2, 4)
+        } else {
+          expInput.value = val
+        }
+      })
+    }
+
+    const simForm = modal.querySelector('#sim-payment-form') as HTMLFormElement
+    simForm.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const submitBtn = modal.querySelector('#sim-submit-btn') as HTMLButtonElement
+      submitBtn.disabled = true
+      submitBtn.textContent = 'Procesando pago seguro...'
+      submitBtn.style.opacity = '0.75'
+
+      setTimeout(() => {
+        submitBtn.textContent = '¡Pago Aprobado! ✓'
+        submitBtn.style.background = 'var(--color-success)'
+        submitBtn.style.borderColor = 'var(--color-success)'
+
+        setTimeout(() => {
+          modal.remove()
+          window.location.hash = `#/suscripcion-exitosa?subscriptionId=${subscriptionId}`
+        }, 1000)
+      }, 1500)
+    })
+  }
 }
