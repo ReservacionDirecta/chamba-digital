@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { connectDB } from './db.js'
 import { serviceRouter } from './routes/services.js'
 import { bookingRouter } from './routes/bookings.js'
@@ -10,6 +12,8 @@ import { authRouter } from './routes/auth.js'
 import { projectsRouter } from './routes/projects.js'
 
 dotenv.config()
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -30,6 +34,14 @@ app.use('/api/projects', projectsRouter)
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
+
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.resolve(__dirname, '..', 'dist')
+  app.use(express.static(distPath))
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'))
+  })
+}
 
 connectDB().then(() => {
   app.listen(PORT, () => {
