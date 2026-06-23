@@ -295,7 +295,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ═══ SECTIONS ═══ */
 .section-title {
-  font-size: clamp(9vw, 4vw, 44px);
+  font-size: clamp(6vw, 4vw, 44px);
   font-weight: 800;
   letter-spacing: -0.04em;
   text-align: center;
