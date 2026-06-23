@@ -106,80 +106,119 @@ function renderProjectView(container: HTMLDivElement, project: any, loggedInUser
 
         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start;" class="features-grid">
           
-          <!-- Left Column: Project Form -->
-          <div class="sub-form-card" style="border: 1px solid var(--color-border); box-shadow: 0 4px 20px rgba(0,0,0,0.02); background: white; border-radius: 16px; padding: 32px;">
-            <form id="project-form" style="display:flex; flex-direction:column; gap: 24px;">
+          <!-- Left Column: Project Form & Roadmap -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="sub-form-card" style="border: 1px solid var(--color-border); box-shadow: 0 4px 20px rgba(0,0,0,0.02); background: white; border-radius: 16px; padding: 32px;">
+              <form id="project-form" style="display:flex; flex-direction:column; gap: 24px;">
+                
+                <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 16px; margin-bottom: 8px;">
+                  <h3 style="font-size: 16px; font-weight: 700; color: var(--color-ink); margin-bottom: 4px;">1. Datos Básicos</h3>
+                  <p style="font-size: 13px; color: var(--color-ink-muted); margin: 0;">Identificación pública de tu negocio.</p>
+                </div>
+
+                <div class="form-grid" style="margin-bottom: 4px;">
+                  <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
+                    <label class="input-label" style="font-weight: 600; font-size: 13px;">Nombre comercial</label>
+                    <input type="text" id="proj-business" class="input" value="${project.businessName || ''}" placeholder="Ej. Barbería El Elegante" required />
+                  </div>
+                  <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
+                    <label class="input-label" style="font-weight: 600; font-size: 13px;">Sector o Nicho principal</label>
+                    <select id="proj-niche" class="input" style="height: 48px; background-image: none; cursor: pointer;">
+                      <option value="Peluquerías" ${project.niche === 'Peluquerías' ? 'selected' : ''}>Peluquerías & Barberías</option>
+                      <option value="Consultorios" ${project.niche === 'Consultorios' ? 'selected' : ''}>Consultorios & Médicos</option>
+                      <option value="Spas & Estética" ${project.niche === 'Spas & Estética' ? 'selected' : ''}>Spas & Estética</option>
+                      <option value="Gimnasios" ${project.niche === 'Gimnasios' ? 'selected' : ''}>Gimnasios & Fitness</option>
+                      <option value="Inmobiliarias & Realtors" ${project.niche === 'Inmobiliarias & Realtors' ? 'selected' : ''}>Inmobiliarias & Realtors</option>
+                      <option value="Talleres mecánicos" ${project.niche === 'Talleres mecánicos' ? 'selected' : ''}>Talleres mecánicos</option>
+                      <option value="Clases particulares" ${project.niche === 'Clases particulares' ? 'selected' : ''}>Clases & Academias</option>
+                      <option value="Otros" ${project.niche === 'Otros' ? 'selected' : ''}>Otros servicios</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 16px; margin-bottom: 8px; margin-top: 8px;">
+                  <h3 style="font-size: 16px; font-weight: 700; color: var(--color-ink); margin-bottom: 4px;">2. Estilo y Funciones</h3>
+                  <p style="font-size: 13px; color: var(--color-ink-muted); margin: 0;">Define la experiencia y apariencia del sitio.</p>
+                </div>
+
+                <div class="form-grid" style="margin-bottom: 4px;">
+                  <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
+                    <label class="input-label" style="font-weight: 600; font-size: 13px;">Estilo estético</label>
+                    <select id="proj-webtype" class="input" style="height: 48px; background-image: none; cursor: pointer;">
+                      <option value="Moderna" ${project.webType === 'Moderna' ? 'selected' : ''}>Moderna (Gradientes, limpia)</option>
+                      <option value="Minimalista" ${project.webType === 'Minimalista' ? 'selected' : ''}>Minimalista (Monocromo, elegante)</option>
+                      <option value="Corporativa" ${project.webType === 'Corporativa' ? 'selected' : ''}>Corporativa (Seria, profesional)</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
+                    <label class="input-label" style="font-weight: 600; font-size: 13px;">WhatsApp de notificaciones</label>
+                    <input type="tel" id="proj-whatsapp" class="input" value="${project.whatsapp || ''}" placeholder="+52 123 456 7890" required />
+                  </div>
+                </div>
+
+                <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
+                  <label class="input-label" style="font-weight: 600; font-size: 13px;">Servicios a agendar (Nombre - Duración - Precio)</label>
+                  <textarea id="proj-services" class="input" rows="4" style="resize: vertical; font-family: monospace; font-size: 13px; line-height: 1.6; padding: 14px 18px;" placeholder="Ej.&#10;Corte Clásico - 30 min - $15&#10;Tratamiento Capilar - 45 min - $30" required>${project.services || ''}</textarea>
+                </div>
+
+                <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
+                  <label class="input-label" style="font-weight: 600; font-size: 13px;">Colores preferidos o comentarios de diseño</label>
+                  <textarea id="proj-notes" class="input" rows="3" style="resize: vertical; padding: 14px 18px;" placeholder="Ej. Prefiero tonos azules oscuros con blanco.">${project.notes || ''}</textarea>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 12px; padding-top: 20px; border-top:1px solid var(--color-border); flex-wrap:wrap; gap:16px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:13px; color:var(--color-ink-muted);">Estado del sitio:</span>
+                    <span class="status-${project.status.toLowerCase().replace(' ', '-')}" style="font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 100px; text-transform: uppercase;">
+                      ${project.status}
+                    </span>
+                  </div>
+
+                  <div class="step-actions" style="margin: 0;">
+                    <button type="submit" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);">
+                      Guardar y Solicitar Cambios
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Project Roadmap Timeline Card -->
+            <div style="border: 1px solid var(--color-border); box-shadow: 0 4px 20px rgba(0,0,0,0.02); background: white; border-radius: 16px; padding: 32px; text-align: left;">
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--color-ink); margin-bottom: 6px;">Roadmap del Proyecto</h3>
+              <p style="font-size: 13px; color: var(--color-ink-muted); margin-bottom: 24px;">Progreso de diseño y puesta en marcha de tu motor de reservas.</p>
               
-              <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 16px; margin-bottom: 8px;">
-                <h3 style="font-size: 16px; font-weight: 700; color: var(--color-ink); margin-bottom: 4px;">1. Datos Básicos</h3>
-                <p style="font-size: 13px; color: var(--color-ink-muted); margin: 0;">Identificación pública de tu negocio.</p>
-              </div>
-
-              <div class="form-grid" style="margin-bottom: 4px;">
-                <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
-                  <label class="input-label" style="font-weight: 600; font-size: 13px;">Nombre comercial</label>
-                  <input type="text" id="proj-business" class="input" value="${project.businessName || ''}" placeholder="Ej. Barbería El Elegante" required />
+              <div class="timeline" style="margin: 0; padding: 0;">
+                <div class="timeline-item done">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <strong>Ficha técnica recibida</strong>
+                    <span>Tus datos iniciales han sido registrados</span>
+                  </div>
                 </div>
-                <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
-                  <label class="input-label" style="font-weight: 600; font-size: 13px;">Sector o Nicho principal</label>
-                  <select id="proj-niche" class="input" style="height: 48px; background-image: none; cursor: pointer;">
-                    <option value="Peluquerías" ${project.niche === 'Peluquerías' ? 'selected' : ''}>Peluquerías & Barberías</option>
-                    <option value="Consultorios" ${project.niche === 'Consultorios' ? 'selected' : ''}>Consultorios & Médicos</option>
-                    <option value="Spas & Estética" ${project.niche === 'Spas & Estética' ? 'selected' : ''}>Spas & Estética</option>
-                    <option value="Gimnasios" ${project.niche === 'Gimnasios' ? 'selected' : ''}>Gimnasios & Fitness</option>
-                    <option value="Inmobiliarias & Realtors" ${project.niche === 'Inmobiliarias & Realtors' ? 'selected' : ''}>Inmobiliarias & Realtors</option>
-                    <option value="Talleres mecánicos" ${project.niche === 'Talleres mecánicos' ? 'selected' : ''}>Talleres mecánicos</option>
-                    <option value="Clases particulares" ${project.niche === 'Clases particulares' ? 'selected' : ''}>Clases & Academias</option>
-                    <option value="Otros" ${project.niche === 'Otros' ? 'selected' : ''}>Otros servicios</option>
-                  </select>
+                <div class="timeline-item ${['En Diseño', 'En Desarrollo', 'Completado'].includes(project.status) ? 'done' : ''}">
+                  <div class="timeline-dot" ${project.status === 'En Diseño' ? 'style="background: var(--color-accent); border-color: var(--color-accent);"' : ''}></div>
+                  <div class="timeline-content">
+                    <strong ${project.status === 'En Diseño' ? 'style="color: var(--color-accent);"' : ''}>Diseño de interfaz</strong>
+                    <span>Maquetado de estilo y paleta de colores</span>
+                  </div>
                 </div>
-              </div>
-
-              <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 16px; margin-bottom: 8px; margin-top: 8px;">
-                <h3 style="font-size: 16px; font-weight: 700; color: var(--color-ink); margin-bottom: 4px;">2. Estilo y Funciones</h3>
-                <p style="font-size: 13px; color: var(--color-ink-muted); margin: 0;">Define la experiencia y apariencia del sitio.</p>
-              </div>
-
-              <div class="form-grid" style="margin-bottom: 4px;">
-                <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
-                  <label class="input-label" style="font-weight: 600; font-size: 13px;">Estilo estético</label>
-                  <select id="proj-webtype" class="input" style="height: 48px; background-image: none; cursor: pointer;">
-                    <option value="Moderna" ${project.webType === 'Moderna' ? 'selected' : ''}>Moderna (Gradientes, limpia)</option>
-                    <option value="Minimalista" ${project.webType === 'Minimalista' ? 'selected' : ''}>Minimalista (Monocromo, elegante)</option>
-                    <option value="Corporativa" ${project.webType === 'Corporativa' ? 'selected' : ''}>Corporativa (Seria, profesional)</option>
-                  </select>
+                <div class="timeline-item ${['En Desarrollo', 'Completado'].includes(project.status) ? 'done' : ''}">
+                  <div class="timeline-dot" ${project.status === 'En Desarrollo' ? 'style="background: var(--color-accent); border-color: var(--color-accent);"' : ''}></div>
+                  <div class="timeline-content">
+                    <strong ${project.status === 'En Desarrollo' ? 'style="color: var(--color-accent);"' : ''}>Desarrollo y motor de reservas</strong>
+                    <span>Montaje del calendario y pasarela de pago</span>
+                  </div>
                 </div>
-                <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
-                  <label class="input-label" style="font-weight: 600; font-size: 13px;">WhatsApp de notificaciones</label>
-                  <input type="tel" id="proj-whatsapp" class="input" value="${project.whatsapp || ''}" placeholder="+52 123 456 7890" required />
+                <div class="timeline-item ${project.status === 'Completado' ? 'done' : ''}">
+                  <div class="timeline-dot" ${project.status === 'Completado' ? 'style="background: var(--color-success); border-color: var(--color-success);"' : ''}></div>
+                  <div class="timeline-content">
+                    <strong ${project.status === 'Completado' ? 'style="color: var(--color-success);"' : ''}>Despliegue final y puesta en marcha</strong>
+                    <span>Dominio activo y listo para recibir clientes</span>
+                  </div>
                 </div>
               </div>
-
-              <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
-                <label class="input-label" style="font-weight: 600; font-size: 13px;">Servicios a agendar (Nombre - Duración - Precio)</label>
-                <textarea id="proj-services" class="input" rows="4" style="resize: vertical; font-family: monospace; font-size: 13px; line-height: 1.6; padding: 14px 18px;" placeholder="Ej.&#10;Corte Clásico - 30 min - $15&#10;Tratamiento Capilar - 45 min - $30" required>${project.services || ''}</textarea>
-              </div>
-
-              <div class="form-group" style="display:flex; flex-direction:column; gap:6px;">
-                <label class="input-label" style="font-weight: 600; font-size: 13px;">Colores preferidos o comentarios de diseño</label>
-                <textarea id="proj-notes" class="input" rows="3" style="resize: vertical; padding: 14px 18px;" placeholder="Ej. Prefiero tonos azules oscuros con blanco.">${project.notes || ''}</textarea>
-              </div>
-
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 12px; padding-top: 20px; border-top:1px solid var(--color-border); flex-wrap:wrap; gap:16px;">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="font-size:13px; color:var(--color-ink-muted);">Estado del sitio:</span>
-                  <span class="status-${project.status.toLowerCase().replace(' ', '-')}" style="font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 100px; text-transform: uppercase;">
-                    ${project.status}
-                  </span>
-                </div>
-
-                <div class="step-actions" style="margin: 0;">
-                  <button type="submit" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);">
-                    Guardar y Solicitar Cambios
-                  </button>
-                </div>
-              </div>
-            </form>
+            </div>
           </div>
 
           <!-- Right Column: Billing Status & CRM Chat -->
