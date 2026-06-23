@@ -2,7 +2,7 @@ import { getBooking } from '../lib/api.js'
 
 export async function renderPaymentPending(container: HTMLDivElement, bookingId: string) {
   container.innerHTML = `
-    <nav class="navbar">
+    <nav class="navbar scrolled">
       <div class="container nav-inner">
         <a href="#/" class="logo">chamba<span>.digital</span></a>
       </div>

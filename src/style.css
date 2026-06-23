@@ -464,7 +464,7 @@ a { text-decoration: none; color: inherit; }
 .footer-copy { font-size: 13px; color: var(--color-ink-muted); }
 
 /* ═══ BOOKING ═══ */
-.booking-page { padding: 56px 0 100px; }
+.booking-page { padding: calc(var(--height-navbar) + 32px) 0 100px; }
 .booking-header { margin-bottom: 40px; }
 .booking-header h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 12px; }
 
@@ -528,7 +528,7 @@ a { text-decoration: none; color: inherit; }
 .payment-method-card:hover .pm-arrow { transform: translateX(4px); color: var(--color-accent); }
 
 /* ═══ PENDING & SUCCESS ═══ */
-.pending-page, .success-page { padding: 80px 0; text-align: center; }
+.pending-page, .success-page { padding: calc(var(--height-navbar) + 32px) 0 80px; text-align: center; }
 .pending-card, .success-card { max-width: 600px; margin: 0 auto; }
 .pending-icon, .success-icon { font-size: 56px; margin-bottom: 20px; display: block; }
 .pending-card h1, .success-card h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
@@ -567,7 +567,7 @@ a { text-decoration: none; color: inherit; }
 .status-cancelled { color: var(--color-error); font-weight: 600; }
 
 /* ═══ SUBSCRIPTION ═══ */
-.subscription-page { padding: 80px 0; }
+.subscription-page { padding: calc(var(--height-navbar) + 32px) 0 80px; }
 .sub-header { text-align: center; margin-bottom: 48px; }
 .sub-header h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 12px; }
 .sub-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 820px; margin: 0 auto 48px; }

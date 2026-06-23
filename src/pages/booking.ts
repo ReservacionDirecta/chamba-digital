@@ -16,7 +16,7 @@ export async function renderBooking(container: HTMLDivElement, serviceId: string
 
   function render() {
     container.innerHTML = `
-      <nav class="navbar">
+      <nav class="navbar scrolled">
         <div class="container nav-inner">
           <a href="#/" class="logo">chamba<span>.digital</span></a>
           <a href="#/" class="btn btn-ghost btn-sm">← Volver</a>
