@@ -209,7 +209,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .hero-content h1 {
-  font-size: clamp(9vw, 8vw, 64px);
+  font-size: clamp(6vw, 8vw, 6vw);
   font-weight: 800;
   line-height: 1.06;
   letter-spacing: -0.035em;
@@ -639,12 +639,41 @@ a { text-decoration: none; color: inherit; }
 
 .loader { text-align: center; padding: 72px; color: var(--color-ink-muted); font-size: 15px; }
 
+.user-email-tag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
-  .nav-inner { padding: 0 16px; }
-  .nav-links { gap: 12px; }
+  .navbar {
+    height: auto;
+    min-height: var(--height-navbar);
+  }
+  .nav-inner {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 8px;
+  }
+  .nav-links { gap: 8px; }
   .nav-links a:not(.btn) { display: none; }
-  .nav-links .btn { padding: 8px 16px; font-size: 13px; }
+  .nav-links .btn { padding: 8px 14px; font-size: 13px; }
+  
+  .user-email-tag {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
 
   .hero-sticky {
     height: 100vh;

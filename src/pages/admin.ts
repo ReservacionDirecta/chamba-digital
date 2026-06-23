@@ -1,54 +1,5 @@
 import { fetchServices, getBookings, createService, deleteService } from '../lib/api.js'
 
-const defaultProjects = [
-  {
-    id: 'salon-glamour@email.com',
-    businessName: 'Salón Glamour',
-    niche: 'Spas & Estética',
-    webType: 'Moderna',
-    services: 'Masaje relajante (60 min - $50)\nCorte de dama (40 min - $25)',
-    whatsapp: '+52 555 123 4567',
-    notes: 'Queremos tonos dorados y negros con look de lujo.',
-    plan: 'base',
-    status: 'Recibido',
-    createdAt: '22/06/2026',
-    chatHistory: [
-      { sender: 'client', message: 'Hola, me gustaría saber si podemos integrar pagos con Stripe.', time: '10:00 AM' },
-      { sender: 'admin', message: '¡Hola! Sí, lo podemos integrar en el Plan Dedicado sin problema.', time: '10:05 AM' }
-    ]
-  },
-  {
-    id: 'dental-care@email.com',
-    businessName: 'Dental Care',
-    niche: 'Consultorios',
-    webType: 'Minimalista',
-    services: 'Limpieza dental (45 min - $40)\nConsulta general (30 min - $20)',
-    whatsapp: '+52 555 987 6543',
-    notes: 'Un estilo muy limpio e higiénico, preferiblemente blanco y azul claro.',
-    plan: 'dedicado',
-    status: 'En Diseño',
-    createdAt: '21/06/2026',
-    chatHistory: [
-      { sender: 'admin', message: 'Hola, hemos comenzado con el diseño de tu web Dental Care.', time: '09:00 AM' }
-    ]
-  },
-  {
-    id: 'barber-shop@email.com',
-    businessName: 'Barberia Bros',
-    niche: 'Peluquerías',
-    webType: 'Moderna',
-    services: 'Corte y barba (50 min - $22)',
-    whatsapp: '+52 555 111 2222',
-    notes: 'Estilo rústico, madera y tonos oscuros.',
-    plan: 'base',
-    status: 'En Desarrollo',
-    createdAt: '20/06/2026',
-    chatHistory: [
-      { sender: 'client', message: '¡Se ve excelente la demo! ¿Cuándo hacemos la integración del botón?', time: '06:30 PM' }
-    ]
-  }
-]
-
 export async function renderAdmin(container: HTMLDivElement) {
   const loggedInUser = localStorage.getItem('logged_in_user')
   if (loggedInUser !== 'admin@chamba.digital') {
@@ -83,30 +34,19 @@ export async function renderAdmin(container: HTMLDivElement) {
 
   let services: any[] = []
   let bookings: any[] = []
-  try {
-    ;[services, bookings] = await Promise.all([fetchServices(), getBookings()])
-  } catch {
-    services = []
-    bookings = []
-  }
-
-  // Load projects
-  const projectListKeys: string[] = JSON.parse(localStorage.getItem('active_projects_list') || '[]')
   let projects: any[] = []
 
-  if (projectListKeys.length === 0) {
-    const defaultKeys: string[] = []
-    defaultProjects.forEach(p => {
-      localStorage.setItem(`project_${p.id}`, JSON.stringify(p))
-      defaultKeys.push(p.id)
-    })
-    localStorage.setItem('active_projects_list', JSON.stringify(defaultKeys))
-    projects = [...defaultProjects]
-  } else {
-    projectListKeys.forEach(k => {
-      const raw = localStorage.getItem(`project_${k}`)
-      if (raw) projects.push(JSON.parse(raw))
-    })
+  try {
+    const projectsResponse = await fetch('/api/projects')
+    if (projectsResponse.ok) {
+      projects = await projectsResponse.json()
+    }
+    ;[services, bookings] = await Promise.all([fetchServices(), getBookings()])
+  } catch (err) {
+    console.error(err)
+    services = []
+    bookings = []
+    projects = []
   }
 
   // State
@@ -201,38 +141,41 @@ export async function renderAdmin(container: HTMLDivElement) {
               </div>
               
               <div style="display:flex; flex-direction:column; gap:12px; flex-grow:1;">
-                ${colProjects.map(proj => `
-                  <div class="project-card" data-id="${proj.id}" style="background:white; border:1px solid var(--color-border-strong); border-radius:10px; padding:16px; cursor:pointer; transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-                      <span style="font-size:10px; font-weight:700; text-transform:uppercase; padding:3px 8px; border-radius:100px; background:${proj.plan === 'base' ? 'var(--color-accent-muted)' : 'rgba(168, 85, 247, 0.08)'}; color:${proj.plan === 'base' ? 'var(--color-accent)' : '#a855f7'};">
-                        Plan ${proj.plan}
-                      </span>
-                      <span style="font-size:11px; color:var(--color-ink-muted);">${proj.createdAt}</span>
-                    </div>
-                    
-                    <h4 style="font-size:14px; font-weight:700; margin:0 0 6px; color:var(--color-ink);">${proj.businessName}</h4>
-                    <p style="font-size:12px; color:var(--color-ink-secondary); margin:0 0 14px; line-height:1.4;">${proj.niche} &bull; Web ${proj.webType}</p>
-                    
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.03); padding-top:10px;">
-                      <span style="font-size:11px; color:var(--color-accent); font-weight:600; display:inline-flex; align-items:center; gap:4px;">
-                        Ver ficha &rarr;
-                      </span>
+                ${colProjects.map(proj => {
+                  const projId = proj._id || proj.id
+                  return `
+                    <div class="project-card" data-id="${projId}" style="background:white; border:1px solid var(--color-border-strong); border-radius:10px; padding:16px; cursor:pointer; transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                        <span style="font-size:10px; font-weight:700; text-transform:uppercase; padding:3px 8px; border-radius:100px; background:${proj.plan === 'base' ? 'var(--color-accent-muted)' : 'rgba(168, 85, 247, 0.08)'}; color:${proj.plan === 'base' ? 'var(--color-accent)' : '#a855f7'};">
+                          Plan ${proj.plan}
+                        </span>
+                        <span style="font-size:11px; color:var(--color-ink-muted);">${new Date(proj.createdAt).toLocaleDateString()}</span>
+                      </div>
                       
-                      <div style="display:flex; gap:6px;">
-                        ${col.key !== 'Recibido' ? `
-                          <button class="move-btn" data-id="${proj.id}" data-to="${columns[columns.findIndex(c => c.key === col.key) - 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;">
-                            &larr;
-                          </button>
-                        ` : ''}
-                        ${col.key !== 'Completado' ? `
-                          <button class="move-btn" data-id="${proj.id}" data-to="${columns[columns.findIndex(c => c.key === col.key) + 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;">
-                            &rarr;
-                          </button>
-                        ` : ''}
+                      <h4 style="font-size:14px; font-weight:700; margin:0 0 6px; color:var(--color-ink);">${proj.businessName}</h4>
+                      <p style="font-size:12px; color:var(--color-ink-secondary); margin:0 0 14px; line-height:1.4;">${proj.niche} &bull; Web ${proj.webType}</p>
+                      
+                      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.03); padding-top:10px;">
+                        <span style="font-size:11px; color:var(--color-accent); font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+                          Ver ficha &rarr;
+                        </span>
+                        
+                        <div style="display:flex; gap:6px;">
+                          ${col.key !== 'Recibido' ? `
+                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) - 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;">
+                              &larr;
+                            </button>
+                          ` : ''}
+                          ${col.key !== 'Completado' ? `
+                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) + 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;">
+                              &rarr;
+                            </button>
+                          ` : ''}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                `).join('')}
+                  `
+                }).join('')}
                 ${colProjects.length === 0 ? `
                   <div style="font-size:12px; color:var(--color-ink-muted); text-align:center; padding:40px 0; border:1px dashed var(--color-border); border-radius:10px; background:rgba(255,255,255,0.4);">
                     Sin proyectos en esta etapa
@@ -332,6 +275,7 @@ export async function renderAdmin(container: HTMLDivElement) {
 
   function renderDetailModal() {
     const proj = activeDetailProject
+    const projId = proj._id || proj.id
     return `
       <div id="modal-container" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15, 23, 42, 0.4); backdrop-filter:blur(6px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:24px;">
         <div style="background:white; border-radius:16px; width:100%; max-width:960px; height:85vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.15); border: 1px solid var(--color-border-strong);">
@@ -468,7 +412,7 @@ export async function renderAdmin(container: HTMLDivElement) {
           if (target.closest('.move-btn')) return
 
           const id = card.getAttribute('data-id')!
-          activeDetailProject = projects.find(p => p.id === id) || null
+          activeDetailProject = projects.find(p => (p._id || p.id) === id) || null
           updateView()
 
           // Scroll chat
@@ -479,15 +423,28 @@ export async function renderAdmin(container: HTMLDivElement) {
 
       // Move action buttons
       container.querySelectorAll('.move-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', async (e) => {
           e.stopPropagation()
           const id = btn.getAttribute('data-id')!
           const toStatus = btn.getAttribute('data-to')!
-          const targetProj = projects.find(p => p.id === id)
-          if (targetProj) {
-            targetProj.status = toStatus
-            localStorage.setItem(`project_${id}`, JSON.stringify(targetProj))
+          
+          try {
+            const res = await fetch(`/api/projects/${id}/status`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: toStatus })
+            })
+            if (!res.ok) throw new Error('Fallo al actualizar en MongoDB')
+            
+            // Reload projects from server
+            const projectsResponse = await fetch('/api/projects')
+            if (projectsResponse.ok) {
+              projects = await projectsResponse.json()
+            }
             updateView()
+          } catch (err) {
+            console.error(err)
+            alert('Error al mover el proyecto')
           }
         })
       })
@@ -542,43 +499,70 @@ export async function renderAdmin(container: HTMLDivElement) {
     // Status change in modal
     const modalStatusSelect = container.querySelector('#modal-status-select') as HTMLSelectElement
     if (modalStatusSelect && activeDetailProject) {
-      modalStatusSelect.addEventListener('change', () => {
-        activeDetailProject.status = modalStatusSelect.value
-        localStorage.setItem(`project_${activeDetailProject.id}`, JSON.stringify(activeDetailProject))
+      modalStatusSelect.addEventListener('change', async () => {
+        const toStatus = modalStatusSelect.value
+        const projId = activeDetailProject._id || activeDetailProject.id
         
-        // Sync project array
-        const idx = projects.findIndex(p => p.id === activeDetailProject.id)
-        if (idx !== -1) projects[idx] = activeDetailProject
-        updateView()
+        try {
+          const res = await fetch(`/api/projects/${projId}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: toStatus })
+          })
+          if (!res.ok) throw new Error('Fallo al actualizar')
+          
+          const updated = await res.json()
+          activeDetailProject = updated
+          
+          // Refresh list
+          const projectsResponse = await fetch('/api/projects')
+          if (projectsResponse.ok) {
+            projects = await projectsResponse.json()
+          }
+          updateView()
+        } catch (err) {
+          console.error(err)
+          alert('Error al actualizar el estado del proyecto')
+        }
       })
     }
 
     // CRM Chat message submit
     const chatForm = container.querySelector('#chat-input-form')
     if (chatForm && activeDetailProject) {
-      chatForm.addEventListener('submit', (e) => {
+      chatForm.addEventListener('submit', async (e) => {
         e.preventDefault()
         const input = container.querySelector('#chat-message-input') as HTMLInputElement
         const text = input.value.trim()
         if (!text) return
 
-        const newMsg = {
-          sender: 'admin',
-          message: text,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        const projId = activeDetailProject._id || activeDetailProject.id
+
+        try {
+          const res = await fetch(`/api/projects/${projId}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sender: 'admin', message: text })
+          })
+          if (!res.ok) throw new Error('Fallo al enviar mensaje')
+          
+          const updated = await res.json()
+          activeDetailProject = updated
+          
+          // Refresh list
+          const projectsResponse = await fetch('/api/projects')
+          if (projectsResponse.ok) {
+            projects = await projectsResponse.json()
+          }
+          updateView()
+
+          // Scroll chat
+          const chatContainer = container.querySelector('#chat-messages-container')
+          if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight
+        } catch (err) {
+          console.error(err)
+          alert('Error al enviar el mensaje de chat')
         }
-
-        activeDetailProject.chatHistory.push(newMsg)
-        localStorage.setItem(`project_${activeDetailProject.id}`, JSON.stringify(activeDetailProject))
-        
-        const idx = projects.findIndex(p => p.id === activeDetailProject.id)
-        if (idx !== -1) projects[idx] = activeDetailProject
-        
-        updateView()
-
-        // Scroll chat
-        const chatContainer = container.querySelector('#chat-messages-container')
-        if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight
       })
     }
   }

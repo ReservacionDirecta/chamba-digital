@@ -7,6 +7,7 @@ import { bookingRouter } from './routes/bookings.js'
 import { checkoutRouter } from './routes/checkout.js'
 import { webhookRouter } from './routes/webhook.js'
 import { authRouter } from './routes/auth.js'
+import { projectsRouter } from './routes/projects.js'
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ app.use('/api/bookings', bookingRouter)
 app.use('/api/checkout', checkoutRouter)
 app.use('/api/webhook', webhookRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/projects', projectsRouter)
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
