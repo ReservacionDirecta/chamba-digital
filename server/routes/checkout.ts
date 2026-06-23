@@ -32,6 +32,14 @@ checkoutRouter.post('/session', async (req, res) => {
 
     const origin = req.headers.origin || 'http://localhost:5173'
 
+    // If using default / dummy token, bypass Polar API call and enter demo mode
+    if (token === 'your_polar_access_token' || token.startsWith('your_')) {
+      return res.json({
+        isDemo: true,
+        bookingId: booking._id,
+      })
+    }
+
     const response = await fetch(`${POLAR_API}/checkouts`, {
       method: 'POST',
       headers: {
