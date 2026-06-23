@@ -95,16 +95,16 @@ export async function renderAdmin(container: HTMLDivElement) {
     ]
 
     return `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 32px; flex-wrap:wrap; gap:16px; border-bottom: 1px solid var(--color-border); padding-bottom: 20px;">
+      <div class="admin-page-header" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
         <div>
-          <h1 style="font-size: 28px; font-weight: 800; letter-spacing:-0.03em; margin: 0 0 4px;">Gestión de Cuentas</h1>
-          <p style="color:var(--color-ink-secondary); font-size:14px; margin:0;">Tablero de control y CRM integrado para proyectos activos.</p>
+          <h1>Gestión de Cuentas</h1>
+          <p>Tablero de control y CRM integrado para proyectos activos.</p>
         </div>
         
-        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size: 13px; font-weight: 600; color: var(--color-ink-secondary);">Nicho:</span>
-            <select id="filter-niche" class="input" style="height:36px; min-width: 140px; padding:0 12px; font-size:13px; border-radius:6px;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+          <div class="form-field">
+            <label class="input-label">Nicho</label>
+            <select id="filter-niche" class="input" style="height:40px; min-width:140px; padding:0 12px; font-size:13px;">
               <option value="all" ${filterNiche === 'all' ? 'selected' : ''}>Todos</option>
               <option value="Peluquerías" ${filterNiche === 'Peluquerías' ? 'selected' : ''}>Barberías</option>
               <option value="Consultorios" ${filterNiche === 'Consultorios' ? 'selected' : ''}>Consultorios</option>
@@ -115,9 +115,9 @@ export async function renderAdmin(container: HTMLDivElement) {
             </select>
           </div>
 
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size: 13px; font-weight: 600; color: var(--color-ink-secondary);">Plan:</span>
-            <select id="filter-plan" class="input" style="height:36px; min-width: 120px; padding:0 12px; font-size:13px; border-radius:6px;">
+          <div class="form-field">
+            <label class="input-label">Plan</label>
+            <select id="filter-plan" class="input" style="height:40px; min-width:120px; padding:0 12px; font-size:13px;">
               <option value="all" ${filterPlan === 'all' ? 'selected' : ''}>Todos</option>
               <option value="base" ${filterPlan === 'base' ? 'selected' : ''}>Plan Base</option>
               <option value="dedicado" ${filterPlan === 'dedicado' ? 'selected' : ''}>Plan Dedicado</option>
@@ -127,47 +127,47 @@ export async function renderAdmin(container: HTMLDivElement) {
       </div>
 
       <!-- Kanban Grid -->
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; overflow-x:auto;">
         ${columns.map(col => {
           const colProjects = filtered.filter(p => p.status === col.key)
           return `
-            <div style="background:var(--color-surface-0); border:1px solid var(--color-border); border-radius:12px; padding:16px; min-height:550px; display:flex; flex-direction:column; gap:14px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.03); padding-bottom:10px;">
+              <div style="background:var(--color-surface-0); border:1px solid var(--color-border); border-radius:var(--radius-card); padding:16px; min-height:400px; display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid var(--color-border);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="font-size:15px;">${col.icon}</span>
-                  <span style="font-size:14px; font-weight:700; color:var(--color-ink);">${col.title}</span>
+                  <span style="font-size:14px;">${col.icon}</span>
+                  <span style="font-size:13px; font-weight:700; color:var(--color-ink);">${col.title}</span>
                 </div>
-                <span style="background:var(--color-surface-3); color:var(--color-ink-secondary); font-size:11px; padding:2px 8px; border-radius:10px; font-weight:700;">${colProjects.length}</span>
+                <span style="background:var(--color-surface-3); color:var(--color-ink-secondary); font-size:11px; padding:2px 8px; border-radius:var(--radius-pill); font-weight:700;">${colProjects.length}</span>
               </div>
               
               <div style="display:flex; flex-direction:column; gap:12px; flex-grow:1;">
                 ${colProjects.map(proj => {
                   const projId = proj._id || proj.id
                   return `
-                    <div class="project-card" data-id="${projId}" style="background:white; border:1px solid var(--color-border-strong); border-radius:10px; padding:16px; cursor:pointer; transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
-                      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-                        <span style="font-size:10px; font-weight:700; text-transform:uppercase; padding:3px 8px; border-radius:100px; background:${proj.plan === 'base' ? 'var(--color-accent-muted)' : 'rgba(168, 85, 247, 0.08)'}; color:${proj.plan === 'base' ? 'var(--color-accent)' : '#a855f7'};">
+                    <div class="project-card" data-id="${projId}" style="background:white; border:1px solid var(--color-border-strong); border-radius:10px; padding:14px; cursor:pointer; transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                        <span style="font-size:10px; font-weight:700; text-transform:uppercase; padding:3px 8px; border-radius:var(--radius-pill); background:${proj.plan === 'base' ? 'var(--color-accent-muted)' : 'rgba(168, 85, 247, 0.08)'}; color:${proj.plan === 'base' ? 'var(--color-accent)' : '#a855f7'};">
                           Plan ${proj.plan}
                         </span>
                         <span style="font-size:11px; color:var(--color-ink-muted);">${new Date(proj.createdAt).toLocaleDateString()}</span>
                       </div>
                       
-                      <h4 style="font-size:14px; font-weight:700; margin:0 0 6px; color:var(--color-ink);">${proj.businessName}</h4>
-                      <p style="font-size:12px; color:var(--color-ink-secondary); margin:0 0 14px; line-height:1.4;">${proj.niche} &bull; Web ${proj.webType}</p>
+                      <h4 style="font-size:13px; font-weight:700; margin:0 0 4px; color:var(--color-ink);">${proj.businessName}</h4>
+                      <p style="font-size:11px; color:var(--color-ink-secondary); margin:0 0 12px; line-height:1.4;">${proj.niche} &bull; Web ${proj.webType}</p>
                       
-                      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.03); padding-top:10px;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--color-border); padding-top:10px;">
                         <span style="font-size:11px; color:var(--color-accent); font-weight:600; display:inline-flex; align-items:center; gap:4px;">
                           Ver ficha &rarr;
                         </span>
                         
-                        <div style="display:flex; gap:6px;">
+                        <div style="display:flex; gap:4px;">
                           ${col.key !== 'Recibido' ? `
-                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) - 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;">
+                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) - 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:28px; height:28px; border-radius:var(--radius-xs); cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--color-accent)';this.style.color='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)';this.style.color='var(--color-ink-secondary)'">
                               &larr;
                             </button>
                           ` : ''}
                           ${col.key !== 'Completado' ? `
-                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) + 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:24px; height:24px; border-radius:6px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center;">
+                            <button class="move-btn" data-id="${projId}" data-to="${columns[columns.findIndex(c => c.key === col.key) + 1].key}" style="border:1px solid var(--color-border); background:white; color:var(--color-ink-secondary); width:28px; height:28px; border-radius:var(--radius-xs); cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--color-accent)';this.style.color='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)';this.style.color='var(--color-ink-secondary)'">
                               &rarr;
                             </button>
                           ` : ''}
@@ -177,8 +177,8 @@ export async function renderAdmin(container: HTMLDivElement) {
                   `
                 }).join('')}
                 ${colProjects.length === 0 ? `
-                  <div style="font-size:12px; color:var(--color-ink-muted); text-align:center; padding:40px 0; border:1px dashed var(--color-border); border-radius:10px; background:rgba(255,255,255,0.4);">
-                    Sin proyectos en esta etapa
+                  <div style="font-size:12px; color:var(--color-ink-muted); text-align:center; padding:32px 16px; border:1px dashed var(--color-border); border-radius:10px; background:rgba(255,255,255,0.4);">
+                    Sin proyectos
                   </div>
                 ` : ''}
               </div>
@@ -191,28 +191,44 @@ export async function renderAdmin(container: HTMLDivElement) {
 
   function renderServicesTab() {
     return `
-      <div style="margin-bottom: 32px; border-bottom: 1px solid var(--color-border); padding-bottom: 20px;">
-        <h1 style="font-size: 28px; font-weight: 800; letter-spacing:-0.03em; margin: 0 0 4px;">Configuración del Motor</h1>
-        <p style="color:var(--color-ink-secondary); font-size:14px; margin:0;">Edita el menú de servicios y revisa las citas del calendario cliente.</p>
+      <div class="admin-page-header">
+        <h1>Configuración del Motor</h1>
+        <p>Edita el menú de servicios y revisa las citas del calendario cliente.</p>
       </div>
 
       <div class="admin-grid">
         <div class="admin-section">
           <h2>Agregar Servicio</h2>
           <form id="service-form" class="admin-form">
-            <div class="form-row">
-              <input type="text" id="svc-name" class="input" placeholder="Ej. Corte Clásico" required style="border-radius:6px;" />
-              <input type="number" id="svc-duration" class="input input-sm" placeholder="Min" required style="border-radius:6px; max-width:80px;" />
-              <input type="number" id="svc-price" class="input input-sm" placeholder="Precio" required style="border-radius:6px; max-width:90px;" />
+            <div class="form-field admin-form-full">
+              <label class="input-label">Nombre del servicio</label>
+              <input type="text" id="svc-name" class="input" placeholder="Ej. Corte Clásico" required />
             </div>
-            <div class="form-row">
-              <input type="text" id="svc-desc" class="input" placeholder="Descripción breve" required style="border-radius:6px;" />
-              <input type="text" id="svc-polar" class="input" placeholder="Polar Product ID (opcional)" style="border-radius:6px;" />
-              <button type="submit" class="btn btn-primary" style="border-radius:6px; min-width:110px;">Añadir</button>
+            <div class="admin-form-grid">
+              <div class="form-field">
+                <label class="input-label">Duración (min)</label>
+                <input type="number" id="svc-duration" class="input" placeholder="30" required />
+              </div>
+              <div class="form-field">
+                <label class="input-label">Precio (USD)</label>
+                <input type="number" id="svc-price" class="input" placeholder="25" required />
+              </div>
+              <div class="form-field">
+                <label class="input-label">Polar Product ID</label>
+                <input type="text" id="svc-polar" class="input" placeholder="Opcional" />
+              </div>
+              <button type="submit" class="btn btn-primary" style="height:44px; padding:0 24px;">Añadir</button>
+            </div>
+            <div class="form-field admin-form-full">
+              <label class="input-label">Descripción</label>
+              <input type="text" id="svc-desc" class="input" placeholder="Descripción breve del servicio" required />
             </div>
           </form>
+        </div>
 
-          <div class="admin-table-wrap" style="box-shadow: none; border: 1px solid var(--color-border);">
+        <div class="admin-section">
+          <h2>Servicios Registrados</h2>
+          <div class="admin-table-wrap">
             <table class="admin-table">
               <thead>
                 <tr>
@@ -240,8 +256,8 @@ export async function renderAdmin(container: HTMLDivElement) {
         </div>
 
         <div class="admin-section">
-          <h2>Reservas recientes</h2>
-          <div class="admin-table-wrap" style="box-shadow: none; border: 1px solid var(--color-border);">
+          <h2>Reservas Recientes</h2>
+          <div class="admin-table-wrap">
             <table class="admin-table">
               <thead>
                 <tr>
